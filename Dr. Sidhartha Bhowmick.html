@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Sidhartha Bhowmick</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Segoe UI, sans-serif;
+height:100vh;
+overflow:hidden;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+color:white;
+background:#0f2027;
+position:relative;
+}
+       
+    /* profile */
+.profile{
+width:15vw;
+max-width:150px;
+height:auto;
+border-radius:50%;
+border:4px solid white;
+margin-bottom:3vh;
+box-shadow:0 0 25px rgba(255,255,255,.6);
+z-index:1;
+position:relative;
+}
+
+/* Particle Background */
+#particles-js{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:0;
+}
+
+/* Math Symbols Background */
+#math-symbols{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:1;
+}
+
+.symbol{
+position:absolute;
+color:rgba(255,255,255,0.15);
+font-size:30px;
+animation:float 15s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(100vh) rotate(0deg);}
+100%{transform:translateY(-10vh) rotate(360deg);}
+}
+
+/* Content */
+.content{
+position:relative;
+z-index:2;
+text-align:center;
+}
+
+h1{
+font-size:4vw;
+max-font-size:40px;
+margin-bottom:1.5vh;
+text-align:center;
+text-shadow:0 0 15px rgba(0,0,0,.5);
+z-index:1;
+position:relative;
+}
+  /* responsive adjustments */
+@media(max-width:768px){
+h1{font-size:7vw;}
+.folder-container{gap:6vw;}
+.folder{padding:5vw;}
+.folder i{font-size:10vw;}
+.folder p{font-size:4vw;}
+.profile{width:25vw;}
+}
+
+@media(max-width:480px){
+h1{font-size:8vw;}
+.folder i{font-size:12vw;}
+.folder p{font-size:5vw;}
+.profile{width:30vw;}
+}  
+
+h2{
+color:#00fff5;
+margin-bottom:15px;
+    font-size:3vw;
+max-font-size:28px;
+margin-bottom:3vh;
+text-align:center;
+text-shadow:0 0 10px rgba(0,0,0,.5);
+z-index:1;
+position:relative;
+}
+
+/* Folder */
+.folder-container{
+display:flex;
+gap:40px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.folder{
+min-width:120px;
+padding:30px;
+border-radius:20px;
+text-align:center;
+text-decoration:none;
+color:white;
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(15px);
+transition:0.4s;
+}
+
+.folder:hover{
+transform:translateY(-15px) scale(1.1);
+background:rgba(255,255,255,0.25);
+box-shadow:0 0 20px rgba(0,255,245,0.6);
+}
+
+.folder i{
+font-size:40px;
+margin-bottom:10px;
+}
+    #math-symbols{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:-1;
+}
+
+.symbol{
+position:absolute;
+color:rgba(255,255,255,0.7);
+font-size:20px;
+animation:floatSymbol linear infinite;
+}
+
+@keyframes floatSymbol{
+0%{transform:translateY(100vh) rotate(0deg);}
+100%{transform:translateY(-10vh) rotate(360deg);}
+}
+
+</style>
+</head>
+
+<body>
+    <img src="https://jrp.jnu.ac.bd/emp_pics_nids/photo_10358.jpg" class="profile">
+
+<div id="particles-js"></div>
+
+<!-- Math Symbols -->
+<div id="math-symbols">
+<span class="symbol" style="left:10%;">∑</span>
+<span class="symbol" style="left:30%; animation-delay:3s;">π</span>
+<span class="symbol" style="left:50%; animation-delay:6s;">√</span>
+<span class="symbol" style="left:70%; animation-delay:2s;">∞</span>
+<span class="symbol" style="left:85%; animation-delay:5s;">∆</span>
+</div>
+<div id="math-symbols"></div>
+<script>
+
+/* floating particles / math symbols */
+const symbols = ['∑','∫','π','√','α','β','θ','∞','∆','∇'];
+const container = document.getElementById("math-symbols");
+
+for(let i=0;i<40;i++){
+    let sym = document.createElement("div");
+    sym.className="symbol";
+    sym.innerText = symbols[Math.floor(Math.random()*symbols.length)];
+    sym.style.left=Math.random()*100+"%";
+    sym.style.fontSize=(10+Math.random()*30)+"px";
+    sym.style.animationDuration=(10+Math.random()*15)+"s";
+    container.appendChild(sym);
+}
+
+/* generate background particles */
+for(let i=0;i<60;i++){
+    let 
+}
+
+</script>
+    
+<div class="content">
+
+<h1>Dr. Sidhartha Bhowmick (Professor) </h1>
+    <h2>Advanced Numerical Analysis</h2>
+
+<div class="folder-container">
+
+<a href="https://drive.google.com/drive/folders/1DvMCldf3-EogFo4Ndxff8VjjD_h6xQsI?usp=sharing" class="folder">
+<i class="fas fa-video"></i>
+<p>Video</p>
+</a>
+
+<a href="https://drive.google.com/drive/folders/1cwm_1x7in-u3SqBAZv2IXuzuXSyq_Mvs?usp=sharing" class="folder">
+<i class="fas fa-file-pdf"></i>
+<p>PDF</p>
+</a>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+<script>
+particlesJS("particles-js", {
+  particles: {
+    number: { value: 80 },
+    color: { value: "#00fff5" },
+    shape: { type: "circle" },
+    opacity: { value: 0.6 },
+    size: { value: 3 },
+    move: { enable: true, speed: 2 }
+  },
+  interactivity: {
+    events: {
+      onhover: { enable: true, mode: "repulse" },
+      onclick: { enable: true, mode: "push" }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
