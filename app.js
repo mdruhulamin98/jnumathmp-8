@@ -1,6 +1,5 @@
 /**
- * JNU Math MSc Batch-8 Dynamic Engine
- * This script handles all content rendering via JavaScript
+ * JNU Math MSc Batch-8 Complete Dynamic Engine
  */
 
 const teachersData = [
@@ -20,36 +19,63 @@ const noticeData = [
     { title: "Class Notes", link: "https://drive.google.com/drive/folders/1tY9I0J4qJUu4RGF-31_pVnO_RC3JtAlr?usp=sharing" }
 ];
 
-// Function to Render Teachers
+// আপনার কন্টাক্ট এবং ডেভেলপার ডাটা
+const contactInfo = {
+    email: "info@college.edu",
+    whatsapp: "#",
+    facebook: "#",
+    developer: {
+        name: "Md RuhuL AmiN",
+        img: "Developer.jpeg"
+    }
+};
+
 function initApp() {
+    // ১. শিক্ষকদের কার্ড লোড করা
     const teacherGrid = document.getElementById('teacher-grid');
+    if(teacherGrid) {
+        teachersData.forEach(teacher => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <a href="${teacher.link}" class="teacher-link">
+                    <img src="${teacher.img}" alt="${teacher.name}">
+                    <h2>${teacher.subject}</h2>
+                    <span>Instructor: ${teacher.name}</span>
+                </a>`;
+            teacherGrid.appendChild(card);
+        });
+    }
+
+    // ২. নোটিশ লোড করা
     const noticeGrid = document.getElementById('notice-grid');
+    if(noticeGrid) {
+        noticeData.forEach(notice => {
+            const nLink = document.createElement('a');
+            nLink.href = notice.link;
+            nLink.className = 'notice';
+            nLink.innerText = notice.title;
+            noticeGrid.appendChild(nLink);
+        });
+    }
 
-    // Load Teachers
-    teachersData.forEach(teacher => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-            <a href="${teacher.link}" class="teacher-link">
-                <img src="${teacher.img}" alt="${teacher.name}">
-                <h2>${teacher.subject}</h2>
-                <span>Instructor: ${teacher.name}</span>
-            </a>
-        `;
-        teacherGrid.appendChild(card);
-    });
+    // ৩. কন্টাক্ট ও ডেভেলপার সেকশন লোড করা (আপনার index.html এ যদি নিচের আইডিগুলো থাকে)
+    const footerContact = document.querySelector('.contact-box');
+    if(footerContact) {
+        footerContact.innerHTML = `
+            <div>
+                <h3>Contact Us</h3>
+                <p>${contactInfo.email}</p>
+                <p><a href="${contactInfo.whatsapp}" style="color:white;text-decoration:none;">WhatsApp</a></p>
+                <p><a href="${contactInfo.facebook}" style="color:white;text-decoration:none;">Facebook</a></p>
+            </div>
+            <div class="Developer-container">
+                <img src="${contactInfo.developer.img}" alt="Profile Photo" style="width:70px; border-radius:50%;">
+                <h1 style="font-size:20px; color:white;">Developer by ${contactInfo.developer.name}</h1>
+            </div>`;
+    }
 
-    // Load Notices
-    noticeData.forEach(notice => {
-        const nLink = document.createElement('a');
-        nLink.href = notice.link;
-        nLink.className = 'notice';
-        nLink.innerText = notice.title;
-        noticeGrid.appendChild(nLink);
-    });
-
-    console.log("JS.ORG: Logic initialized successfully.");
+    console.log("JS.ORG Verification: All modules loaded via JavaScript.");
 }
 
-// Start rendering when page loads
 window.onload = initApp;
