@@ -1,558 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=1200">
-
-<title>Professional MSc Jagannath University</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
-}
-
-body{
-background:#f5f7ff;
-background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url("");
-    background-size: cover;
-background-position: center;
-    
-
-}
-
-.container{
-width:1200px;
-margin:auto;
-}
-
-/* HEADER */
-
-header{
-background:#1e4f91;
-color:white;
-padding:18px 0;
-}
-
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-}
-
-.logo h2{
-font-weight:600;
-}
-
-.logo p{
-font-size:13px;
-}
-
-nav a{
-margin-left:20px;
-color:white;
-text-decoration:none;
-font-size:15px;
-transition:.3s;
-font-weight: blod;
-}
-
-nav a:hover{
-color:#ffd94d;
-}
-
-/* HERO */
-
-.hero{
-height:380px;
-background:
-linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),
-url("https://en.banglapedia.org/images/4/4d/Jagannathuniversity.jpg") center/cover;
-display:flex;
-align-items:center;
-color:white;
-}
-
-.hero-text h1{
-font-size:44px;
-margin-bottom:10px;
-
-}
-
-.hero-text p{
-font-size:18px;
-}
-
-/* SECTION */
-
-.section{
-padding:20px 0;
-text-align:center;
-}
-
-.section h1{
-color:#1e4f91;
-margin-bottom:10px;
-}
-
-.section p{
-color:#666;
-margin-bottom:40px;
-}
-    .teacher-link{
-text-decoration:none;
-color:black;
-display:block;
-}
-
-/* TEACHER CARDS */
-
-.cards{
-display:flex;
-justify-content:space-between;
-}
-
-.card{
-background:white;
-width:350px;
-border-radius:10px;
-padding:20px;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-8px);
-box-shadow:0 18px 35px rgba(0,0,0,.15);
-}
-
-.card img{
-width:100%;
-height:300px;
-object-fit:cover;
-border-radius:8px;
-margin-bottom:10px;
-}
-
-.card h2{
-font-size:20px;
-margin-bottom:6px;
-}
-
-.card span{
-color:#555;
-font-size:14px;
-}
-
-/* NOTICE */
-
-.notice-list{
-display:flex;
-justify-content:center;
-gap:25px;
-text-decoration:none;
-}
-    .notice-link{
-        text-decoration: none;
-    }
-
-.notice{
-background:white;
-padding:15px 28px;
-border-radius:8px;
-box-shadow:0 6px 15px rgba(0,0,0,.08);
-    transition:0.3s;
-cursor:pointer;
-text-align:center;
-text-decoration:none;
-color:#1e4f91;
-font-weight:600;
-animation:noticeBounce 1.5s infinite;
-    text-decoration:none;
-}
-    .notice:hover{
-background:#ff9800;
-color:white;
-transform:translateY(-3px);
-}
-
-@keyframes noticeBounce{
-0%{transform:translateY(0);}
-50%{transform:translateY(-6px);}
-100%{transform:translateY(0);}
-}
-    
-    .notice-1 {
-  font-size: 18px;
-  font-weight: bold;
-  padding: 15px 25px;
-  color: white;
-  border-radius: 10px;
-  display: inline-block;
-  animation: bgGlow 3s infinite linear;
-        text-decoration:none;
-}
-
-@keyframes bgGlow {
-  0% {
-    background: linear-gradient(45deg, #ff4d4d, #ffcc00);
-    box-shadow: 0 0 10px #ff4d4d;
-  }
-  25% {
-    background: linear-gradient(45deg, #00c3ff, #0066ff);
-    box-shadow: 0 0 15px #00c3ff;
-  }
-  50% {
-    background: linear-gradient(45deg, #00ff99, #00cc66);
-    box-shadow: 0 0 15px #00ff99;
-  }
-  75% {
-    background: linear-gradient(45deg, #ff00cc, #9900ff);
-    box-shadow: 0 0 15px #ff00cc;
-  }
-  100% {
-    background: linear-gradient(45deg, #ff4d4d, #ffcc00);
-    box-shadow: 0 0 10px #ff4d4d;
-  }
-}
-
-/* FACILITIES */
-
-.facilities{
-display:flex;
-justify-content:space-evenly;
-}
-
-.facility{
-background:white;
-padding:20px 30px;
-border-radius:8px;
-box-shadow:0 6px 15px rgba(0,0,0,.08);
-transition:.3s;
-}
-
-.facility:hover{
-background:#1e4f91;
-color:white;
-}
-
-/* GALLERY */
-
-.gallery{
-display:flex;
-justify-content:space-between;
-}
-    
-.text{
-    padding:0px;
-    font-size:15px;
-    font-style: italic;
-    font-weight: bold;
-    color: #2E8B57;
-    font-family: 'Baloo Da 2', cursive;
-    }
-
-.gallery img{
-width:370px;
-border-radius:10px;
-transition:.4s;
-}
-
-.gallery img:hover{
-transform:scale(1.05);
-}
-
-/* CONTACT */
-
-.contact{
-background:#1e4f91;
-color:white;
-padding:5px 0;
-background-image:url("map.png")
-    }
-
-.contact a{
-    text-decoration:none;
-    color: white;
-    font-weight: blod;
-}
-    
-.contact a:hover{
-  color:#ffd54f;
-}
-
-.contact-box{
-display:flex;
-justify-content:space-between;
-}
-    .Developer {
-    margin: 0;
-    padding: 0;
-    background: transparent; /* No background color */
-    font-family: 'Playfair Display', serif;
-}
-
-/* Header Container */
-.Developer-container {
-    text-align: center;
-    padding: 10px 10px;
-    perspective: 1200px; /* 3D perspective for photo */
-}
-
-/* Profile Image with continuous 3D float */
-.Developer-container img {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: 3px solid #fff;
-    object-fit: cover;
-    margin-bottom: 5px;
-    animation: float3d 5s ease-in-out infinite;
-    transform-style: preserve-3d;
-    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
-}
-
-/* 3D floating animation keyframes */
-@keyframes float3d {
-    0% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
-    25% { transform: translateY(-10px) rotateX(5deg) rotateY(10deg); }
-    50% { transform: translateY(-15px) rotateX(0deg) rotateY(20deg); }
-    75% { transform: translateY(-10px) rotateX(-5deg) rotateY(10deg); }
-    100% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
-}
-
-/* Name (Classic, elegant font) */
-.Developer-container h1 {
-    font-size: 20px;
-    font-weight: bolder;
-    font-style: italic;
-    margin: 0;
-    Background: ;
-    color: #1E3A8A;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-}
-
-
-/* FOOTER */
-
-footer{
-background:#0f2f5f;
-color:white;
-text-align:center;
-padding:10px;
-font-weight: bold;
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200">
+    <title>Professional MSc Jagannath University</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* আপনার সব Original CSS */
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+        body{background:#f5f7ff;}
+        .container{width:1200px;margin:auto;}
+        header{background:#1e4f91;color:white;padding:18px 0;}
+        .navbar{display:flex;justify-content:space-between;align-items:center;}
+        .logo h2{font-weight:600;}
+        .logo p{font-size:13px;}
+        nav a{margin-left:20px;color:white;text-decoration:none;font-size:15px;font-weight:bold;}
+        .hero{height:380px;background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)), url("https://en.banglapedia.org/images/4/4d/Jagannathuniversity.jpg") center/cover;display:flex;align-items:center;color:white;}
+        .hero-text h1{font-size:44px;margin-bottom:10px;margin-left: 20px;}
+        .hero-text p{font-size:18px;margin-left: 20px;}
+        .section{padding:20px 0;text-align:center;}
+        .section h1{color:#1e4f91;margin-bottom:10px;}
+        .cards{display:grid;grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 20px;}
+        .card{background:white;border-radius:10px;padding:20px;box-shadow:0 10px 25px rgba(0,0,0,.08);transition:.3s;text-align:left;}
+        .card:hover{transform:translateY(-8px);box-shadow:0 18px 35px rgba(0,0,0,.15);}
+        .card img{width:100%;height:300px;object-fit:cover;border-radius:8px;margin-bottom:10px;}
+        .card h2{font-size:18px;margin-bottom:6px;color:#1e4f91;}
+        .card span{color:#555;font-size:14px;}
+        .notice-list{display:flex;justify-content:center;gap:25px;flex-wrap: wrap;}
+        .notice{background:white;padding:15px 28px;border-radius:8px;box-shadow:0 6px 15px rgba(0,0,0,.08);color:#1e4f91;font-weight:600;text-decoration:none;animation:noticeBounce 1.5s infinite;}
+        @keyframes noticeBounce{0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);}}
+        .notice-1 {font-size: 18px;font-weight: bold;padding: 15px 25px;color: white;border-radius: 10px;display: inline-block;animation: bgGlow 3s infinite linear;margin-bottom:20px;}
+        @keyframes bgGlow {0% {background: linear-gradient(45deg, #ff4d4d, #ffcc00);} 50% {background: linear-gradient(45deg, #00c3ff, #0066ff);} 100% {background: linear-gradient(45deg, #ff4d4d, #ffcc00);}}
+        .facilities{display:flex;justify-content:space-evenly;margin-top:20px;}
+        .facility{background:white;padding:20px 30px;border-radius:8px;box-shadow:0 6px 15px rgba(0,0,0,.08);transition:.3s;}
+        .facility:hover{background:#1e4f91;color:white;}
+        footer{background:#0f2f5f;color:white;text-align:center;padding:15px;margin-top:30px;font-weight:bold;}
+        .teacher-link{text-decoration:none;color:inherit;}
+    </style>
 </head>
-
 <body>
+    <header>
+        <div class="container navbar">
+            <div class="logo">
+                <h2>Professional MSc Jagannath University</h2>
+                <p>Batch-8th | Fall-2025</p>
+            </div>
+            <nav><a href="#">Department of Mathematics</a></nav>
+        </div>
+    </header>
 
-<header>
+    <section class="hero">
+        <div class="container hero-text">
+            <h1>Professional MSc Jagannath University</h1>    
+            <p>Knowledge • Discipline • Success</p>
+        </div>
+    </section>
 
-<div class="container navbar">
-
-<div class="logo">
-<h2>Professional MSc Jagannath University</h2>
-<p>Batch-8th | Fall-2025</p>
-</div>
-
-<nav>
-<a href="#"><h3>Department of Mathematics</h3>
-    </a>
-
-</nav>
-
-</div>
-
-</header>
-
-<section class="hero">
-
-<div class="container hero-text">
-
-<h1>Professional MSc Jagannath University</h1>    
-
-<p>Knowledge • Discipline • Success</p>
-
-</div>
-
-</section>
-
-<section class="section container">
-
-<h1>Our  Mathematics Department Teachers</h1>
-<p>Shaping the leaders of tomorrow with quality education.</p>
-
-<div class="cards">
-
-<div class="card">
-    <a class="teacher-link"
-       href="Dr.%20Md.%20Ayub%20Ali.html">
-<img src="https://cdn-icons-png.flaticon.com/512/180/180693.png">
-<h2>Lattice Theory & Boolean Algebra</h2>
-<span>Instructor: Ayub Sir (Professor)</span>
-    </a>
-</div>
-
-<div class="card">
-    <a 
-       class="teacher-link"
-       href="MD.%20ASRAFUL%20ISLAM.html">
-<img src="https://jrp.jnu.ac.bd/emp_pics_nids/photo_10763.jpg">
-<h2>Dynamical Systems</h2>
-<span>Instructor: MD. ASRAFUL ISLAM (Assistant Professor)</span>
-    </a>
-</div>
-
-<div class="card">
-    <a class="teacher-link"
-       href="Dr.%20Sidhartha%20Bhowmick.html">
-<img src="https://jrp.jnu.ac.bd/emp_pics_nids/photo_10358.jpg">
-<h2>Advanced Numerical Analysis</h2>
-<span>Instructor: Dr. Sidhartha Bhowmick (Professor)</span>
-        </a>
-</div>
-
-</div>
-
-</section>
-    
     <section class="section container">
+        <h1>Our Mathematics Department Teachers</h1>
+        <p>Shaping the leaders of tomorrow with quality education.</p>
+        <div id="teacher-grid" class="cards">
+            </div>
+    </section>
 
-<div class="cards">
+    <section class="section container">
+        <h1 class="notice-1">Latest Notices</h1>
+        <div id="notice-grid" class="notice-list">
+            </div>
+    </section>
 
-<div class="card">
-    <a class="teacher-link"
-       href="Dr.%20Sharaban%20Thohura.html"> 
-<img src="https://jrp.jnu.ac.bd/emp_pics_nids/photo_10314.jpg">
-<h2>Advanced Mathematical Methods</h2>
-<span>Instructor: DR. SHARABAN THOHURA (Professor)</span>
-        </a>
-</div>
+    <section class="section container">
+        <h1>Student Facilities</h1>
+        <div class="facilities">
+            <div class="facility">Library</div>
+            <div class="facility">Computer Lab</div>
+            <div class="facility">Sports & Playground</div>
+            <div class="facility">Smart Classroom</div>
+        </div>
+    </section>
 
-<div class="card">
-    <a class="teacher-link"
-       href="Dr.%20Md.%20Sarwar%20Alam.html"> 
-<img src="https://jrp.jnu.ac.bd/emp_pics_nids/photo_10191.jpg">
-<h2>Fluid Dynamics and Heat Transfer</h2>
-<span>Instructor: Dr. Md. Sarwar Alam (Professor)</span>
-    </a>
-</div>
+    <footer>
+        © 2026 Professional MSc Jagannath University Batch-8th | Fall-2025
+    </footer>
 
-<div class="card">
-    <a class="teacher-link"
-       href="Dr.%20Md.%20Shariful%20Alam.html"> 
-<img src="https://jrp.jnu.ac.bd/emp_pics_nids/photo_10358.jpg">
-<h2>Biomathematics</h2>
-<span>Instructor: Dr. Md. Shariful Alam(Professor)</span>
-    </a>
-</div>
-
-</div>
-
-</section>
-
-<section class="section container">
-
-<h1 class="notice-1">Latest Notices</h1>
-
-<div class="notice-list">
-<a class="notice-link" href="https://drive.google.com/drive/folders/10_CVz__5Zq1V3L8xXFLxZwe5zqnrmJVe?usp=sharing">
-    <div class="notice">Announcements</div> </a>
-    
-    <a class="notice-link" href="https://drive.google.com/drive/folders/1Yp5KPLXilwA8de_cLWTO7mla8jgCru8o?usp=sharing">
-<div class="notice">Exam Schedule Published</div> 
-    </a>
-        
-        <a class="notice-link" href="https://drive.google.com/drive/folders/1jVqKKha0O452tm3GeWWPK_mnbRPY5eaj?usp=sharing">
-<div class="notice">Result</div>
-            </a>
-            
-        <a class="notice-link" href="https://drive.google.com/drive/folders/1ZVGdtVNO0ZOSRYh8kwEC4__XbUmkPIpi?usp=sharing">
-  <div class="notice">Syllabus</div> 
-            </a>
-        <a class="notice-link" href="https://drive.google.com/drive/folders/1tY9I0J4qJUu4RGF-31_pVnO_RC3JtAlr?usp=sharing">
-    <div class="notice">Class Notes</div>
-            </a>
-</div>
-
-</section>
-
-<section class="section container">
-
-<h1>Student Facilities</h1>
-
-<div class="facilities">
-
-<div class="facility">Library</div>
-<div class="facility">Computer Lab</div>
-<div class="facility">Sports & Playground</div>
-<div class="facility">Smart Classroom</div>
-
-</div>
-
-</section>
-
-<section class="section container">
-
-<h1>Campus Gallery</h1>
-    
-    <p class="text"> সময়ের নীরব প্রবাহে হারিয়ে যাবে বহু দিন,তবু এই বন্ধুত্বের আলো অন্তরের ভেতর চিরকাল জেগে থাকবে, স্মৃতির ফ্রেমে, বন্ধুত্বের আলোকছটা
-</p>
-
-<div class="gallery">
-    
-
-<img src="Image-2.jpeg">
-<img src="Image-1.jpeg">
-<img src="Image-3.jpeg">
-
-</div>
-
-</section>
-
-<section class="contact">
-    
-
-<div class="container contact-box">
-
-<div>
-
-<h3>Contact Us</h3>
-
-
-<p>info@college.edu</p>
-   <p> <a href="#"><i class="fab fa-whatsapp"></i> WhatsApp</a></p>
-    <p>
-  <a href="#"><i class="fab fa-facebook"></i> Facebook</a> </p>
-
-</div>
-
-<div class="Developer-container">
-    <img src="Developer.jpeg" alt="Profile Photo">
-    
-    <h1>Developer by Md RuhuL AmiN</h1>
-</div>
-
-</div>
-
-</section>
-
-<footer>
-
-© 2026 Professional MSc Jagannath University Batch-8th | Fall-2025
-
-</footer>
-
+    <script src="app.js"></script>
 </body>
 </html>
