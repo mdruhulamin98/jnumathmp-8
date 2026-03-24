@@ -1,0 +1,340 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#f5f7ff;
+background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url("");
+    background-size: cover;
+background-position: center;
+    
+
+}
+
+.container{
+width:1200px;
+margin:auto;
+}
+
+/* HEADER */
+
+header{
+background:#1e4f91;
+color:white;
+padding:18px 0;
+}
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+}
+
+.logo h2{
+font-weight:600;
+}
+
+.logo p{
+font-size:13px;
+}
+
+nav a{
+margin-left:20px;
+color:white;
+text-decoration:none;
+font-size:15px;
+transition:.3s;
+font-weight: blod;
+}
+
+nav a:hover{
+color:#ffd94d;
+}
+
+/* HERO */
+
+.hero{
+height:380px;
+background:
+linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),
+url("https://en.banglapedia.org/images/4/4d/Jagannathuniversity.jpg") center/cover;
+display:flex;
+align-items:center;
+color:white;
+}
+
+.hero-text h1{
+font-size:44px;
+margin-bottom:10px;
+
+}
+
+.hero-text p{
+font-size:18px;
+}
+
+/* SECTION */
+
+.section{
+padding:20px 0;
+text-align:center;
+}
+
+.section h1{
+color:#1e4f91;
+margin-bottom:10px;
+}
+
+.section p{
+color:#666;
+margin-bottom:40px;
+}
+    .teacher-link{
+text-decoration:none;
+color:black;
+display:block;
+}
+
+/* TEACHER CARDS */
+
+.cards{
+display:flex;
+justify-content:space-evenly;
+}
+
+.card{
+background:white;
+width:300px;
+border-radius:10px;
+padding:10px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 18px 35px rgba(0,0,0,.15);
+}
+
+.card img{
+width:100%;
+height:250px;
+object-fit:cover;
+object-position: center;
+border-radius:8px;
+margin-bottom:8px;
+}
+
+.card h2{
+font-size:20px;
+margin-bottom:6px;
+}
+
+.card span{
+color:#555;
+font-size:14px;
+}
+
+/* NOTICE */
+
+.notice-list{
+display:flex;
+justify-content:center;
+gap:25px;
+text-decoration:none;
+}
+    .notice-link{
+        text-decoration: none;
+    }
+
+.notice{
+background:white;
+padding:15px 28px;
+border-radius:8px;
+box-shadow:0 6px 15px rgba(0,0,0,.08);
+    transition:0.3s;
+cursor:pointer;
+text-align:center;
+text-decoration:none;
+color:#1e4f91;
+font-weight:600;
+animation:noticeBounce 1.5s infinite;
+    text-decoration:none;
+}
+    .notice:hover{
+background:#ff9800;
+color:white;
+transform:translateY(-3px);
+}
+
+@keyframes noticeBounce{
+0%{transform:translateY(0);}
+50%{transform:translateY(-6px);}
+100%{transform:translateY(0);}
+}
+    
+    .notice-1 {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 15px 25px;
+  color: white;
+  border-radius: 10px;
+  display: inline-block;
+  animation: bgGlow 3s infinite linear;
+        text-decoration:none;
+}
+
+@keyframes bgGlow {
+  0% {
+    background: linear-gradient(45deg, #ff4d4d, #ffcc00);
+    box-shadow: 0 0 10px #ff4d4d;
+  }
+  25% {
+    background: linear-gradient(45deg, #00c3ff, #0066ff);
+    box-shadow: 0 0 15px #00c3ff;
+  }
+  50% {
+    background: linear-gradient(45deg, #00ff99, #00cc66);
+    box-shadow: 0 0 15px #00ff99;
+  }
+  75% {
+    background: linear-gradient(45deg, #ff00cc, #9900ff);
+    box-shadow: 0 0 15px #ff00cc;
+  }
+  100% {
+    background: linear-gradient(45deg, #ff4d4d, #ffcc00);
+    box-shadow: 0 0 10px #ff4d4d;
+  }
+}
+
+/* FACILITIES */
+
+.facilities{
+display:flex;
+justify-content:space-evenly;
+}
+
+.facility{
+background:white;
+padding:20px 30px;
+border-radius:8px;
+box-shadow:0 6px 15px rgba(0,0,0,.08);
+transition:.3s;
+}
+
+.facility:hover{
+background:#1e4f91;
+color:white;
+}
+
+/* GALLERY */
+
+.gallery{
+display:flex;
+justify-content:space-between;
+}
+    
+.text{
+    padding:0px;
+    color: #2E8B57;
+    font-size:15px;
+    font-style: italic;
+    font-weight: bold;
+    
+    font-family: 'Baloo Da 2', cursive;
+    }
+
+.gallery img{
+width:370px;
+border-radius:10px;
+transition:.4s;
+}
+
+.gallery img:hover{
+transform:scale(1.05);
+}
+
+/* CONTACT */
+
+.contact{
+background:#1e4f91;
+color:white;
+padding:5px 0;
+background-image:url("map.png")
+    }
+
+.contact a{
+    text-decoration:none;
+    color: white;
+    font-weight: blod;
+}
+    
+.contact a:hover{
+  color:#ffd54f;
+}
+
+.contact-box{
+display:flex;
+justify-content:space-between;
+}
+    .Developer {
+    margin: 0;
+    padding: 0;
+    background: transparent; /* No background color */
+    font-family: 'Playfair Display', serif;
+}
+
+/* Header Container */
+.Developer-container {
+    text-align: center;
+    padding: 10px 10px;
+    perspective: 1200px; /* 3D perspective for photo */
+}
+
+/* Profile Image with continuous 3D float */
+.Developer-container img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    object-fit: cover;
+    margin-bottom: 5px;
+    animation: float3d 5s ease-in-out infinite;
+    transform-style: preserve-3d;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+/* 3D floating animation keyframes */
+@keyframes float3d {
+    0% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
+    25% { transform: translateY(-10px) rotateX(5deg) rotateY(10deg); }
+    50% { transform: translateY(-15px) rotateX(0deg) rotateY(20deg); }
+    75% { transform: translateY(-10px) rotateX(-5deg) rotateY(10deg); }
+    100% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
+}
+
+/* Name (Classic, elegant font) */
+.Developer-container h1 {
+    font-size: 20px;
+    font-weight: bolder;
+    font-style: italic;
+    margin: 0;
+    Background: ;
+    color: #1E3A8A;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+
+/* FOOTER */
+
+footer{
+background:#0f2f5f;
+color:white;
+text-align:center;
+padding:10px;
+font-weight: bold;
+}
