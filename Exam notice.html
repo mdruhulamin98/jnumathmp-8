@@ -14,21 +14,33 @@
       color: white;
       padding: 10px;
     }
-    .container {
-      display: flex;
-      gap: 20px;
-      padding: 20px;
-      flex-wrap: wrap;
-    }
-    .column {
-      width: 48%;
-      background: #fff;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 0 5px gray;
-      box-sizing: border-box;
-      margin-bottom: 20px;
-    }
+.container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.column {
+  width: 48%;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px gray;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  min-width: 300px;
+}
+
+/* Responsive: মোবাইল বা ছোট স্ক্রিনে নিচের মতো */
+@media (max-width: 768px) {
+  .column {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+} 
+    
     .card {
       border-left: 5px solid #0ea5e9;
       padding: 10px;
