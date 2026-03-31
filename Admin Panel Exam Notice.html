@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel - Exam Notices</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial; background:#eef2f5; padding:20px; }
+    form { max-width:400px; margin:auto; background:white; padding:15px; border-radius:10px; box-shadow:0 0 5px #ccc; }
+    input, textarea, select { width:100%; padding:8px; margin-bottom:10px; box-sizing: border-box;}
+    button { width:100%; padding:10px; border:none; cursor:pointer; border-radius:5px; }
+    .add-btn { background:#0ea5e9; color:white; }
+    .edit-btn { background:#f59e0b; color:white; }
+    .delete-btn { background:#ef4444; color:white; }
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    th, td { border:1px solid #ccc; padding:8px; font-size:13px; }
+    th { background:#0ea5e9; color:white; }
+      pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+    img.exam-image { max-width: 80px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+
+<h2 style="text-align:center">📋 Admin Panel</h2>
+
+<form id="sheetForm">
+  <select id="type" required>
+    <option value="1st">1st Mid</option>
+    <option value="2nd">2nd Mid</option>
+  </select>
+  <input type="text" id="subject" placeholder="Subject" required>
+  <input type="date" id="date" required>
+  <input type="text" id="time" placeholder="Exam Time" required>
+  <textarea id="topic" rows="4" placeholder="Topics"></textarea>
+  <label>Upload Image (optional):</label>
+  <input type="file" id="image" accept="image/*">
+  <input type="hidden" id="editIndex">
+  <button type="submit" class="add-btn">Save</button>
+</form>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th><th>Subject</th><th>Date</th><th>Time</th><th>Topic</th><th>Image</th><th>Action</th>
+    </tr>
+  </thead>
+  <tbody id="dataBody"></tbody>
+</table>
+
+<script>
+const URL = "https://script.google.com/macros/s/AKfycbyMD6bS0sCZs1pQdlx679xJscSBm4RuhmMOV7vZ4WW1DvDmxWQ8E25xdRy4TJFITUt7fg/exec";
+
+const form = document.getElementById("sheetForm");
+let examData = [];
+
+async function loadData() {
+  const res = await fetch(URL);
+  examData = await res.json();
+  renderTable();
+}
+
+function renderTable(){
+  const body = document.getElementById("dataBody");
+  body.innerHTML = "";
+
+  examData.forEach((item, index) => {
+    const [type, subject, date, time, topic, imageUrl] = item;
+
+    const dateObj = new Date(date);
+    const formattedDate = dateObj.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric"
+    });
+
+    body.innerHTML += `
+      <tr>
+        <td>${type}</td>
+        <td>${subject}</td>
+        <td>${formattedDate}</td>
+        <td>${time}</td>
+        <td>${topic}</td>
+        <td>${imageUrl ? `<img class="exam-image" src="${imageUrl}">` : ""}</td>
+        <td>
+          <button class="edit-btn" onclick="editData(${index})">Edit</button>
+          <button class="delete-btn" onclick="deleteData(${index})">Delete</button>
+        </td>
+      </tr>`;
+  });
+}
+
+form.addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const index = document.getElementById("editIndex").value;
+
+  const type = document.getElementById("type").value;
+  const subject = document.getElementById("subject").value;
+  const date = document.getElementById("date").value;
+  const time = document.getElementById("time").value;
+  const topic = document.getElementById("topic").value;
+
+  const imageInput = document.getElementById("image");
+
+  // 🔥 Fix: keep old image if not changed
+  let imageBase64 = examData[index]?.[5] || "";
+
+  if(imageInput.files.length > 0){
+    const file = imageInput.files[0];
+    imageBase64 = await toBase64(file);
+  }
+
+  const payload = {
+    type,
+    subject,
+    date,
+    time,
+    topic,
+    image: imageBase64,
+    action: index !== "" ? "edit" : "add",
+    index: index
+  };
+
+  await fetch(URL, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+
+  form.reset();
+  document.getElementById("editIndex").value = "";
+  loadData();
+});
+
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
+function editData(index){
+  const item = examData[index];
+
+  document.getElementById("type").value = item[0];
+  document.getElementById("subject").value = item[1];
+  document.getElementById("date").value = item[2];
+  document.getElementById("time").value = item[3];
+  document.getElementById("topic").value = item[4];
+  document.getElementById("editIndex").value = index;
+}
+
+async function deleteData(index){
+  if(confirm("Are you sure to delete?")){
+    await fetch(URL, {
+      method: "POST",
+      body: JSON.stringify({action: "delete", index: index})
+    });
+    loadData();
+  }
+}
+
+loadData();
+</script>
+
+</body>
+</html>
