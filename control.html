@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - JNU Math</title>
+    <script>
+        var password = prompt("অনুগ্রহ করে অ্যাডমিন পাসওয়ার্ড দিন:");
+        if (password !== "JnuMath8") { alert("ভুল পাসওয়ার্ড!"); window.location.href = "index.html"; }
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f3f4f6; margin: 0; padding: 20px; }
+        .header { text-align: center; color: #1e293b; font-size: 1.6rem; margin-bottom: 20px; font-weight: bold; }
+        .form-container { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 550px; margin: auto; }
+        select, input, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        textarea { height: 100px; }
+        .btn-save { background-color: #0ea5e9; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 30px; background: white; }
+        .data-table th, .data-table td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 0.8rem; }
+        .data-table th { background-color: #0ea5e9; color: white; }
+        .btn-action { padding: 5px 8px; cursor: pointer; border-radius: 4px; border: none; color: white; margin-right: 5px; }
+        .btn-edit { background: #10b981; }
+        .btn-del { background: #ef4444; }
+    </style>
+</head>
+<body>
+
+<div class="header">📋 Admin Panel</div>
+
+<div class="form-container">
+    <form id="adminForm">
+        <input type="hidden" id="edit-id">
+        <select id="type">
+            <option value="1st Mid">1st Mid</option>
+            <option value="2nd Mid">2nd Mid</option>
+        </select>
+        <input type="text" id="subject" placeholder="Subject Name" required>
+        <input type="date" id="date" required>
+        <input type="text" id="time" placeholder="Exam Time" required>
+        <textarea id="topics" placeholder="Topics/Syllabus..." required></textarea>
+        <button type="submit" class="btn-save" id="submitBtn">Save Data</button>
+    </form>
+</div>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Subject</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Topic</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
+
+<script>
+    // আপনার সঠিক তথ্য এখানে দিন
+    const GITHUB_TOKEN = "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";
+    const USER = "Md-Ruhul-Amin"; 
+    const REPO = "jnumathmp-8"; 
+    const API_URL = `https://api.github.com/repos/${USER}/${REPO}/contents/data.json`;
+
+    async function loadData() {
+        try {
+            const res = await fetch(API_URL, { headers: { Authorization: `token ${GITHUB_TOKEN}` } });
+            if (!res.ok) throw new Error("File not found or Token invalid");
+            const file = await res.json();
+            const data = JSON.parse(atob(file.content));
+            renderTable(data);
+        } catch (e) { alert("Error: " + e.message); }
+    }
+
+    function renderTable(data) {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = "";
+        data.forEach(item => {
+            tbody.innerHTML += `<tr>
+                <td>${item.Exam_Type}</td>
+                <td>${item.Subject}</td>
+                <td>${item.Date}</td>
+                <td>${item.Time}</td>
+                <td style="white-space:pre-line">${item.Topics}</td>
+                <td>
+                    <button class="btn-action btn-edit" onclick="startEdit('${item.id}')">Edit</button>
+                    <button class="btn-action btn-del" onclick="deleteItem('${item.id}')">Del</button>
+                </td>
+            </tr>`;
+        });
+    }
+
+    document.getElementById('adminForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "Saving...";
+        btn.disabled = true;
+
+        try {
+            const getRes = await fetch(API_URL, { headers: { Authorization: `token ${GITHUB_TOKEN}` } });
+            const file = await getRes.json();
+            let currentData = JSON.parse(atob(file.content));
+
+            const editId = document.getElementById('edit-id').value;
+            const newData = {
+                id: editId || Date.now().toString(),
+                Exam_Type: document.getElementById('type').value,
+                Subject: document.getElementById('subject').value,
+                Date: document.getElementById('date').value,
+                Time: document.getElementById('time').value,
+                Topics: document.getElementById('topics').value
+            };
+
+            if(editId) {
+                currentData = currentData.map(i => i.id === editId ? newData : i);
+            } else {
+                currentData.push(newData);
+            }
+
+            const putRes = await fetch(API_URL, {
+                method: "PUT",
+                headers: { Authorization: `token ${GITHUB_TOKEN}`, "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    message: "Admin Update",
+                    content: btoa(unescape(encodeURIComponent(JSON.stringify(currentData, null, 2)))),
+                    sha: file.sha
+                })
+            });
+
+            if(putRes.ok) { alert("Data Saved!"); location.reload(); }
+            else { alert("Failed to save! Check token permissions."); }
+        } catch (e) { alert("Error: " + e.message); }
+        btn.disabled = false; btn.innerText = "Save Data";
+    };
+
+    async function deleteItem(id) {
+        if(!confirm("Delete?")) return;
+        const res = await fetch(API_URL, { headers: { Authorization: `token ${GITHUB_TOKEN}` } });
+        const file = await res.json();
+        const data = JSON.parse(atob(file.content)).filter(i => i.id !== id);
+        
+        await fetch(API_URL, {
+            method: "PUT",
+            headers: { Authorization: `token ${GITHUB_TOKEN}`, "Content-Type": "application/json" },
+            body: JSON.stringify({ message: "Delete", content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2)))), sha: file.sha })
+        });
+        location.reload();
+    }
+
+    function startEdit(id) {
+        const row = Array.from(document.querySelectorAll('tr')).find(r => r.innerHTML.includes(id));
+        // Simple way to fetch and fill (or re-load from allData)
+        loadData().then(() => {
+            // Logic to fill form
+        });
+    }
+
+    window.onload = loadData;
+</script>
+</body>
+</html>

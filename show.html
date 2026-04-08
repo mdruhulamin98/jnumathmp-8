@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JNU Math MSc Batch 8 - Exam Notice Board</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f0f4f8; margin: 0; padding-bottom: 50px; }
+        .header { background-color: #0ea5e9; color: white; text-align: center; padding: 15px; font-size: 1.5rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .main-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
+        @media (max-width: 768px) { .main-container { grid-template-columns: 1fr; } }
+        .exam-column { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .column-title { background: #d1d5db; text-align: center; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 1.3rem; margin-bottom: 20px; color: #1f2937; }
+        .notice-card { border-left: 5px solid #0ea5e9; background: #ffffff; border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 1px solid #e5e7eb; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .subject { color: #0ea5e9; font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 8px; }
+        .meta { display: flex; align-items: center; font-size: 0.9rem; color: #4b5563; margin: 5px 0; }
+        .topic-box { background: #f9fafb; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.85rem; color: #374151; white-space: pre-line; border: 1px dashed #cbd5e1; }
+        .loader { text-align: center; padding: 50px; font-size: 1.2rem; color: #0ea5e9; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">📢 Exam Notice Board</div>
+    <div id="loader" class="loader">ডেটা লোড হচ্ছে...</div>
+    <div class="main-container" id="content" style="display: none;">
+        <div class="exam-column">
+            <div class="column-title">1st Mid Exam</div>
+            <div id="first-mid-list"></div>
+        </div>
+        <div class="exam-column">
+            <div class="column-title">2nd Mid Exam</div>
+            <div id="second-mid-list"></div>
+        </div>
+    </div>
+
+<script>
+    const GITHUB_USER = "Md-Ruhul-Amin"; // আপনার ইউজারনেম
+    const GITHUB_REPO = "jnumathmp-8";   // আপনার রিপোজিটরির নাম
+    
+    async function loadNotices() {
+        const url = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/data.json?t=${new Date().getTime()}`;
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            const list1 = document.getElementById('first-mid-list');
+            const list2 = document.getElementById('second-mid-list');
+            list1.innerHTML = ""; list2.innerHTML = "";
+
+            data.forEach(item => {
+                const cardHtml = `
+                    <div class="notice-card">
+                        <span class="subject">📘 ${item.Subject}</span>
+                        <div class="meta">📅 ${item.Date}</div>
+                        <div class="meta">⏰ Exam Time: ${item.Time}</div>
+                        <div class="topic-box"><strong>Topic:</strong>\n${item.Topics}</div>
+                    </div>`;
+                if(item.Exam_Type === "1st Mid") list1.innerHTML += cardHtml;
+                else list2.innerHTML += cardHtml;
+            });
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('content').style.display = 'grid';
+        } catch (e) { document.getElementById('loader').innerText = "ডেটা পাওয়া যায়নি!"; }
+    }
+    window.onload = loadNotices;
+</script>
+</body>
+</html>
