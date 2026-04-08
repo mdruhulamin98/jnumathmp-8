@@ -1,84 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Exam Notice Board</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial;
-      background: #eef2f5;
-    }
-    h1 {
-      text-align: center;
-      background: #0ea5e9;
-      color: white;
-      padding: 10px;
-    }
+<meta charset="UTF-8">
+<title>📢 Exam Notice Board</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #eef2f5;
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+  background: linear-gradient(45deg,#0ea5e9,#0284c7);
+  color: white;
+  padding: 15px;
+  margin: 0;
+}
+
 .container {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
 .column {
-  width: 48%;
+  flex: 1 1 45%;
+  min-width: 300px;
   background: #fff;
   padding: 15px;
   border-radius: 10px;
-  box-shadow: 0 0 5px gray;
-  box-sizing: border-box;
-  margin-bottom: 20px;
-  min-width: 300px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* Responsive: মোবাইল বা ছোট স্ক্রিনে নিচের মতো */
 @media (max-width: 768px) {
   .column {
-    width: 100% !important;
-    max-width: 100% !important;
+    flex: 1 1 100%;
   }
-} 
-    
-    .card {
-      border-left: 5px solid #0ea5e9;
-      padding: 10px;
-      margin-bottom: 15px;
-      background: #f9f9f9;
-      border-radius: 8px;
-    }
-    h2 {
-      text-align: center;
-      background: #cbd5e1;
-      padding: 5px;
-      margin-top: 0;
-      margin-bottom: 15px;
-    }
-    h3 {
-      color: dodgerblue;
-      margin: 0 0 5px 0;
-    }
-      pre {
+}
+
+h2 {
+  text-align: center;
+  background: #cbd5e1;
+  padding: 8px;
+  border-radius: 6px;
+  margin-top: 0;
+}
+
+.card {
+  border-left: 5px solid #0ea5e9;
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 15px;
+  transition: 0.2s;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.subject {
+  font-weight: bold;
+  color: #0284c7;
+  margin-bottom: 5px;
+}
+
+.topic {
   white-space: pre-wrap;
   word-break: break-word;
   overflow-wrap: break-word;
+  font-size: 14px;
+  margin-top: 5px;
 }
-    img.exam-image {
-      max-width: 120px;
-      border-radius: 5px;
-      margin-top: 10px;
-    }
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+.loading {
+  text-align: center;
+  color: gray;
+}
+
 footer {
-            text-align: center;
-            padding: 10px;
-            background: #007bff;
-            color: white;
-            font-size: 14px;
-        }
-    
-  </style>
+    text-align: center;
+    padding: 12px;
+    background: #0284c7;
+    color: white;
+    font-size: 14px;
+    margin-top: 20px;
+  }
+</style>
 </head>
+
 <body>
 
 <h1>📢 Exam Notice Board</h1>
@@ -86,58 +108,87 @@ footer {
 <div class="container">
   <div class="column">
     <h2>1st Mid Exam</h2>
-    <div id="firstMid"></div>
+    <div id="firstMid"><p class="loading">Loading...</p></div>
   </div>
+
   <div class="column">
     <h2>2nd Mid Exam</h2>
-    <div id="secondMid"></div>
+    <div id="secondMid"><p class="loading">Loading...</p></div>
   </div>
 </div>
 
 <script>
 const URL = "https://script.google.com/macros/s/AKfycbyMD6bS0sCZs1pQdlx679xJscSBm4RuhmMOV7vZ4WW1DvDmxWQ8E25xdRy4TJFITUt7fg/exec";
 
-async function loadData() {
-  const res = await fetch(URL);
-  const data = await res.json();
+const CACHE_KEY = "exam_cache_v3";
 
-  const firstDiv = document.getElementById("firstMid");
-  const secondDiv = document.getElementById("secondMid");
+// 🎨 render function
+function render(data){
+  const first = document.getElementById("firstMid");
+  const second = document.getElementById("secondMid");
 
-  firstDiv.innerHTML = "";
-  secondDiv.innerHTML = "";
+  first.innerHTML = "";
+  second.innerHTML = "";
 
-  data.forEach(item => {
-    const [type, subject, date, time, topic, imageUrl] = item;
-    const dateObj = new Date(date);
-    const formattedDate = dateObj.toLocaleDateString("en-GB", {
+  data.forEach(item=>{
+    const [type, subject, date, time, topic, img] = item;
+
+    const formattedDate = new Date(date).toLocaleDateString("en-GB", {
       day: "2-digit",
-      month: "long",
+      month: "short",
       year: "numeric"
     });
 
     const card = `
       <div class="card">
-        <h3>📘 ${subject}</h3>
-        <p>📅 ${formattedDate}</p>
-        <p>⏰ ${time}</p>
-        <pre>${topic}</pre>
-        ${imageUrl ? `<img class="exam-image" src="${imageUrl}" alt="Exam Image" />` : ""}
+        <div class="subject">📘 ${subject}</div>
+        <div>📅 ${formattedDate}</div>
+        <div>⏰ ${time}</div>
+        <div class="topic">${topic}</div>
+        ${img ? `<img src="${img}" loading="lazy">` : ""}
       </div>
     `;
 
-    if(type === "1st") {
-      firstDiv.innerHTML += card;
+    if(type === "1st"){
+      first.innerHTML += card;
     } else {
-      secondDiv.innerHTML += card;
+      second.innerHTML += card;
     }
   });
 }
 
-loadData();
+// ⚡ load from cache instantly
+function loadCache(){
+  const cache = localStorage.getItem(CACHE_KEY);
+  if(cache){
+    render(JSON.parse(cache));
+  }
+}
+
+// 🔄 fetch new data
+async function fetchData(){
+  try{
+    const res = await fetch(URL);
+    const data = await res.json();
+
+    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    render(data);
+
+  }catch(err){
+    console.log("Error:", err);
+  }
+}
+
+// 🚀 run
+loadCache();     // instant show
+fetchData();     // update
+
+// 🔁 auto update every 30 sec
+setInterval(fetchData, 30000);
 </script>
+    
 <footer>
-    © 2026 Exam Notice System
+  © 2026 Exam Notice System  
 </footer>
 </body>
 </html>
