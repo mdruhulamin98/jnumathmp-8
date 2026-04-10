@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Fall-2025 Result Sheet | 8th Batch | </title>
-    
+    <title>Fall-2025 Result Sheet | MSc Mathematics- 8th batch | </title>
     <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         * {
@@ -27,7 +25,7 @@
             margin: 0 auto;
         }
 
-        /* PDF export style - full page no gaps */
+        /* PDF export - A4 Landscape - no cut text on mobile/computer */
         @media print {
             body {
                 background: white;
@@ -37,18 +35,23 @@
             .container {
                 max-width: 100%;
                 margin: 0;
-                padding: 0.5cm;
+                padding: 0.2cm;
             }
-            .controls-row, .admin-btn, .pdf-btn, .sort-btn, .search-box, .edit-instruction, .admin-toggle, #adminToggleBtn, #downloadPDFBtn, #searchInput, .sort-buttons {
+            /* Hide ALL controls, buttons, search, sort, admin panel, edit instruction */
+            .controls-row, .admin-btn, .pdf-btn, .sort-btn, .search-box, .edit-instruction, 
+            #adminToggleBtn, #downloadPDFBtn, #searchInput, .sort-buttons {
                 display: none !important;
             }
             .result-table {
                 width: 100%;
                 border-collapse: collapse;
+                table-layout: fixed;
             }
             .result-table th, .result-table td {
                 border: 1px solid #000 !important;
-                padding: 6px !important;
+                padding: 5px 3px !important;
+                font-size: 0.7rem !important;
+                word-break: break-word;
             }
             .badge-p, .badge-np, .badge-cp {
                 border: 1px solid #000;
@@ -66,44 +69,89 @@
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+            .legend-bar {
+                background: #fef7e0 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
             .grade-Aplus, .grade-A, .grade-Aminus, .grade-Bplus, .grade-B, .grade-Bminus, .grade-Cplus, .grade-C, .grade-D, .grade-F {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
+            }
+            /* Hide editable inputs in print */
+            .editable-cell input, .editable-text input, .editable-subcode input, .editable-subname input {
+                display: none !important;
+            }
+            .editable-cell small, .editable-subcode small {
+                display: inline !important;
+            }
+            /* Ensure no text cut */
+            .result-table th, .result-table td {
+                white-space: normal;
+                overflow: visible;
             }
         }
 
         .uni-header {
             background: linear-gradient(135deg, #0b2b40, #123e54);
             color: white;
-            padding: 1.5rem 1rem;
+            padding: 1rem 1rem;
             border-radius: 28px;
-            margin-bottom: 2rem;
+            margin-bottom: 1.2rem;
             box-shadow: 0 12px 25px -10px rgba(0,0,0,0.2);
             text-align: center;
         }
 
         .uni-header h1 {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             letter-spacing: -0.3px;
         }
 
         .uni-header h3 {
             font-weight: 500;
-            margin-top: 0.4rem;
+            margin-top: 0.3rem;
             opacity: 0.9;
+            font-size: 0.9rem;
         }
 
         .batch-info {
             background: #e9f0f5;
             border-radius: 24px;
-            padding: 0.8rem 1.2rem;
+            padding: 0.5rem 1rem;
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-bottom: 1.8rem;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
             font-weight: 500;
+            font-size: 0.8rem;
             box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        /* Legend with student counts inside */
+        .legend-bar {
+            background: #fef7e0;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            align-items: center;
+            font-size: 0.75rem;
+            font-weight: 500;
+            justify-content: center;
+        }
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .badge-sample {
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.7rem;
         }
 
         .controls-row {
@@ -128,10 +176,10 @@
 
         .search-box input {
             flex: 1;
-            padding: 12px 8px;
+            padding: 10px 8px;
             border: none;
             background: transparent;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             outline: none;
         }
 
@@ -143,13 +191,13 @@
         .sort-btn {
             background: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
             box-shadow: 0 2px 6px rgba(0,0,0,0.08);
             transition: 0.2s;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .sort-btn.active {
@@ -161,11 +209,11 @@
             background: #2c3e50;
             color: white;
             border: none;
-            padding: 10px 24px;
+            padding: 8px 22px;
             border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .admin-btn.active {
@@ -176,11 +224,11 @@
             background: #2a9d8f;
             color: white;
             border: none;
-            padding: 10px 24px;
+            padding: 8px 22px;
             border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .table-wrapper {
@@ -188,32 +236,39 @@
             border-radius: 24px;
             background: white;
             box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .result-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
-            min-width: 1000px;
+            font-size: 0.72rem;
+            min-width: 1100px;
         }
 
         .result-table th {
             background: #1f5e7e;
             color: white;
-            padding: 12px 6px;
+            padding: 8px 3px;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             border: 1px solid #2c6e8f;
             text-align: center;
+            vertical-align: middle;
+        }
+        .result-table th sub {
+            font-size: 0.6rem;
+            font-weight: normal;
+            display: block;
+            color: #e0f0ff;
+            margin-top: 2px;
         }
 
         .result-table td {
             border: 1px solid #d4dee5;
-            padding: 8px 6px;
+            padding: 5px 3px;
             text-align: center;
             background-color: #ffffff;
-            transition: 0.1s ease;
         }
 
         .result-table tr:hover td {
@@ -231,26 +286,26 @@
         .grade-D { background-color: #ffe0e0; color: #a1220a; }
         .grade-F { background-color: #ffe2e2; color: #c00000; font-weight: bold; }
 
-        .badge-np { background: #c7362b; color: white; padding: 3px 8px; border-radius: 24px; font-size: 0.7rem; font-weight: bold; display: inline-block; }
-        .badge-p { background: #1f8a4c; color: white; padding: 3px 8px; border-radius: 24px; font-size: 0.7rem; font-weight: bold; }
-        .badge-cp { background: #e68a2e; color: white; }
+        .badge-np { background: #c7362b; color: white; padding: 2px 7px; border-radius: 24px; font-size: 0.65rem; font-weight: bold; display: inline-block; }
+        .badge-p { background: #1f8a4c; color: white; padding: 2px 7px; border-radius: 24px; font-size: 0.65rem; font-weight: bold; }
+        .badge-cp { background: #e68a2e; color: white; padding: 2px 7px; border-radius: 24px; font-size: 0.65rem; font-weight: bold; }
 
         .edit-instruction {
             background: #fff3cd;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 40px;
-            font-size: 0.7rem;
-            margin-bottom: 16px;
+            font-size: 0.65rem;
+            margin-bottom: 14px;
             text-align: center;
         }
 
         .footer-note {
             text-align: center;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
             background: #e2eef6;
-            padding: 0.8rem;
+            padding: 0.5rem;
             border-radius: 28px;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
         }
 
         .modal {
@@ -267,16 +322,16 @@
         }
         .modal-content {
             background: white;
-            padding: 28px;
+            padding: 25px;
             border-radius: 32px;
             text-align: center;
             width: 85%;
-            max-width: 320px;
+            max-width: 300px;
         }
         .modal-content input {
             width: 100%;
-            padding: 12px;
-            margin: 16px 0;
+            padding: 10px;
+            margin: 14px 0;
             border-radius: 40px;
             border: 1px solid #ccc;
         }
@@ -284,16 +339,34 @@
             background: #1f5e7e;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: 40px;
             cursor: pointer;
         }
 
+        .editable-cell input, .editable-text input, .editable-subcode input, .editable-subname input {
+            border: 1px solid #7fa1b9;
+            border-radius: 20px;
+            padding: 3px 5px;
+            text-align: center;
+            font-size: 0.68rem;
+            font-weight: normal;
+            background: #fffef5;
+            width: 70px;
+        }
+        .editable-text input {
+            width: 105px;
+        }
+        .editable-subcode input {
+            width: 80px;
+        }
+        .editable-subname input {
+            width: 100px;
+        }
+
         @media (max-width: 700px) {
-            .result-table th, .result-table td { padding: 6px 4px; font-size: 0.72rem; }
-            .uni-header h1 { font-size: 1.4rem; }
-            .controls-row { flex-direction: column; }
-            .sort-buttons { justify-content: center; }
+            .result-table th, .result-table td { padding: 4px 2px; font-size: 0.6rem; }
+            .uni-header h1 { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -301,10 +374,10 @@
 
 <div id="passwordModal" class="modal">
     <div class="modal-content">
-        <h3>🔐 অ্যাডমিন ভেরিফিকেশন</h3>
-        <p style="margin:8px 0; color:gray;">পাসওয়ার্ড দিন</p>
-        <input type="password" id="adminPassword" placeholder="পাসওয়ার্ড লিখুন">
-        <button id="verifyPasswordBtn">ভেরিফাই করুন</button>
+        <h3>🔐 Admin Verification</h3>
+        <p style="margin:8px 0; color:gray;">Enter Password</p>
+        <input type="password" id="adminPassword" placeholder="Password">
+        <button id="verifyPasswordBtn">Verify</button>
         <div id="modalError" style="color:red; margin-top:8px;"></div>
     </div>
 </div>
@@ -312,7 +385,7 @@
 <div class="container" id="reportContainer">
     <div class="uni-header">
         <h1>📊 1st Semester Examination Fall-2025</h1>
-        <h3>Department of Mathematics (8th Batch) <br> Result Sheet</h3>
+        <h3>Department of Mathematics (8th Batch - MSc) <br> Result Sheet</h3>
     </div>
     <div class="batch-info">
         <span>🎓 Session: 2025-26</span>
@@ -321,9 +394,14 @@
         <span>🏆 Highest GPA: 3.96 (Pabitra Chandra Das)</span>
     </div>
 
+    <!-- Legend with P, NP, CP counts -->
+    <div class="legend-bar" id="legendBar">
+        <!-- Will be filled by JavaScript with student counts -->
+    </div>
+
     <div class="controls-row">
         <div class="search-box">
-            🔍 <input type="text" id="searchInput" placeholder="রোল নম্বর বা নাম লিখুন...">
+            🔍 <input type="text" id="searchInput" placeholder="Search by Roll or Name...">
         </div>
         <div class="sort-buttons">
             <button class="sort-btn active" id="sortByDefaultBtn">📋 ডিফল্ট সাজানো</button>
@@ -333,7 +411,7 @@
         <button class="pdf-btn" id="downloadPDFBtn">📄 PDF ডাউনলোড</button>
     </div>
 
-    <div id="editInstruction" class="edit-instruction" style="display: none;">✏️ অ্যাডমিন মোড সক্রিয় — রোল, নাম ও গ্রেড এডিট করুন (CGPA ও রেজাল্ট অটো আপডেট)</div>
+    <div id="editInstruction" class="edit-instruction" style="display: none;">✏️ অ্যাডমিন মোড সক্রিয় — কোড, নাম, রোল, গ্রেড সব এডিট করুন</div>
 
     <div class="table-wrapper">
         <table class="result-table" id="resultTable">
@@ -342,95 +420,117 @@
         </table>
     </div>
     <div class="footer-note">
-        ✅ <strong>Legends:</strong> P = Promoted, N.P = Not Promoted (Failed), C.P = Conditional Promoted  &nbsp;|&nbsp;
-        🎯 CGPA calculated on earned credits (18 = full load) | 
+        ✅ <strong>Legends:</strong> P = Promoted | N.P = Not Promoted | C.P = Conditional Promoted<br>
+        🎯 CGPA calculated on earned credits (3 credits each subject) | Grade: A+ (4.0), A (3.75-3.99), A- (3.5-3.74), B+ (3.25-3.49), B (3.0-3.24), B- (2.75-2.99), C+ (2.5-2.74), C (2.25-2.49), D (2.0-2.24), F (<2.0)
     </div>
 </div>
 
 <script>
     const ADMIN_PASSWORD = "admin123";
     
-    // ========== সম্পূর্ণ ডাটা (Niger Sultana প্রথমে, Monir Hossain একদম শেষে) ==========
+    // Default subject codes and names (you can edit these via admin mode)
+    let subjectCodes = ["PMTH 5101", "PMTH 5102", "PMTH 5103", "PMTH 5104", "PMTH 5106", "PMTH 5107"];
+    let subjectNames = ["", "", "", "", "", ""];  // Empty initially, you can add names
+    
+    // Grade conversion
+    function gpToLetter(gp) {
+        if(gp === 4.0) return "A+";
+        if(gp >= 3.75) return "A";
+        if(gp >= 3.5) return "A-";
+        if(gp >= 3.25) return "B+";
+        if(gp >= 3.0) return "B";
+        if(gp >= 2.75) return "B-";
+        if(gp >= 2.5) return "C+";
+        if(gp >= 2.25) return "C";
+        if(gp >= 2.0) return "D";
+        return "F";
+    }
+
+    // Full dataset
     let studentsData = [
-        {roll:"M250202001", name:"Niger Sultana", g1:3.25,l1:"B+", g2:2.5,l2:"C+", g3:3.5,l3:"A-", g4:3.25,l4:"B+", g5:3.25,l5:"B+", g6:3.0,l6:"B", creditEarned:18, result:"P", cgpa:3.13},
-        {roll:"M250202002", name:"Supt Das", g1:3.25,l1:"B+", g2:3.25,l2:"B+", g3:3.25,l3:"B+", g4:3.5,l4:"A-", g5:3.25,l5:"B+", g6:3.5,l6:"A-", creditEarned:18, result:"P", cgpa:3.33},
-        {roll:"M250202003", name:"Ashma Sathi", g1:3.25,l1:"B+", g2:3.5,l2:"A-", g3:4.0,l3:"A+", g4:4.0,l4:"A+", g5:3.5,l5:"A-", g6:4.0,l6:"A+", creditEarned:18, result:"P", cgpa:3.71},
-        {roll:"M250202004", name:"Saba Akter", g1:3.5,l1:"A-", g2:3.0,l2:"B", g3:2.75,l3:"B-", g4:3.5,l4:"A-", g5:4.0,l5:"A+", g6:3.5,l6:"A-", creditEarned:18, result:"P", cgpa:3.38},
-        {roll:"M250202005", name:"Md. Solayman Hoque", g1:2.0,l1:"D", g2:2.5,l2:"C+", g3:3.0,l3:"B", g4:3.25,l4:"B+", g5:2.75,l5:"B-", g6:3.0,l6:"B", creditEarned:18, result:"P", cgpa:2.75},
-        {roll:"M250202006", name:"Rezaul Haque", g1:2.75,l1:"B-", g2:4.0,l2:"A+", g3:2.75,l3:"B-", g4:2.5,l4:"C+", g5:4.0,l5:"A+", g6:2.5,l6:"C+", creditEarned:18, result:"P", cgpa:3.08},
-        {roll:"M250202007", name:"Nazir Rahman Abbassi", g1:3.5,l1:"A-", g2:3.0,l2:"B", g3:2.75,l3:"B-", g4:3.75,l4:"A", g5:4.0,l5:"A+", g6:2.25,l6:"C", creditEarned:18, result:"P", cgpa:3.21},
-        {roll:"M250202008", name:"Mst. Antara Masuda", g1:3.25,l1:"B+", g2:2.25,l2:"C", g3:2.75,l3:"B-", g4:2.25,l4:"C", g5:2.5,l5:"C+", g6:3.0,l6:"B", creditEarned:18, result:"P", cgpa:2.67},
-        {roll:"M250202009", name:"Md. Rifat Mahmud", g1:0.0,l1:"F", g2:0.0,l2:"F", g3:0.0,l3:"F", g4:0.0,l4:"F", g5:0.0,l5:"F", g6:0.0,l6:"F", creditEarned:0, result:"NP", cgpa:0.0},
-        {roll:"M250202010", name:"Md. Mosfigur Rahman", g1:2.5,l1:"C+", g2:2.75,l2:"B-", g3:3.75,l3:"A", g4:2.5,l4:"C+", g5:3.25,l5:"B+", g6:3.25,l6:"B+", creditEarned:18, result:"P", cgpa:3.0},
-        {roll:"M250202011", name:"Nadia Rahman", g1:3.0,l1:"B", g2:2.75,l2:"B-", g3:3.25,l3:"B+", g4:3.5,l4:"A-", g5:3.0,l5:"B", g6:3.25,l6:"B+", creditEarned:18, result:"P", cgpa:3.13},
-        {roll:"M250202012", name:"Aysha Akter Tuli", g1:2.75,l1:"B-", g2:3.5,l2:"A-", g3:4.0,l3:"A+", g4:3.5,l4:"A-", g5:3.25,l5:"B+", g6:3.5,l6:"A-", creditEarned:18, result:"P", cgpa:3.42},
-        {roll:"M250202013", name:"Anik Proshad Roy", g1:3.0,l1:"B", g2:3.25,l2:"B+", g3:3.75,l3:"A", g4:3.25,l4:"B+", g5:2.75,l5:"B-", g6:3.5,l6:"A-", creditEarned:18, result:"P", cgpa:3.25},
-        {roll:"M250202014", name:"Absar Uddin", g1:2.25,l1:"C", g2:2.25,l2:"C", g3:2.75,l3:"B-", g4:3.0,l4:"B", g5:3.25,l5:"B+", g6:0.0,l6:"F", creditEarned:15, result:"CP", cgpa:2.25},
-        {roll:"M250202015", name:"Md. Asaduzzaman Limon", g1:2.25,l1:"C", g2:3.25,l2:"B+", g3:4.0,l3:"A+", g4:3.0,l4:"B", g5:3.5,l5:"A-", g6:3.25,l6:"B+", creditEarned:18, result:"P", cgpa:3.21},
-        {roll:"M250202016", name:"Md. Rabiul Alam", g1:3.75,l1:"A", g2:3.25,l2:"B+", g3:3.75,l3:"A", g4:3.75,l4:"A", g5:4.0,l5:"A+", g6:3.5,l6:"A-", creditEarned:18, result:"P", cgpa:3.67},
-        {roll:"M250202017", name:"Silvia Arin", g1:3.5,l1:"A-", g2:2.75,l2:"B-", g3:3.0,l3:"B", g4:3.5,l4:"A-", g5:4.0,l5:"A+", g6:3.25,l6:"B+", creditEarned:18, result:"P", cgpa:3.33},
-        {roll:"M250202018", name:"Tariqul Islam", g1:0.0,l1:"F", g2:0.0,l2:"F", g3:0.0,l3:"F", g4:0.0,l4:"F", g5:0.0,l5:"F", g6:0.0,l6:"F", creditEarned:0, result:"NP", cgpa:0.0},
-        {roll:"M250202019", name:"Shahanaj Akter", g1:3.75,l1:"A", g2:3.5,l2:"A-", g3:2.75,l3:"B-", g4:3.0,l4:"B", g5:3.5,l5:"A-", g6:3.5,l6:"A-", creditEarned:18, result:"P", cgpa:3.33},
-        {roll:"M250202020", name:"Arpita Datta", g1:3.0,l1:"B", g2:2.75,l2:"B-", g3:2.75,l3:"B-", g4:3.5,l4:"A-", g5:3.75,l5:"A", g6:3.75,l6:"A", creditEarned:18, result:"P", cgpa:3.25},
-        {roll:"M250202021", name:"Sajib Chandra Paul", g1:2.75,l1:"B-", g2:3.0,l2:"B", g3:3.5,l3:"A-", g4:3.5,l4:"A-", g5:4.0,l5:"A+", g6:3.25,l6:"B+", creditEarned:18, result:"P", cgpa:3.33},
-        {roll:"M250202022", name:"Fatema Khan", g1:0.0,l1:"F", g2:0.0,l2:"F", g3:0.0,l3:"F", g4:0.0,l4:"F", g5:0.0,l5:"F", g6:0.0,l6:"F", creditEarned:0, result:"NP", cgpa:0.0},
-        {roll:"M250202023", name:"Shib Prasad Acharjee", g1:3.5,l1:"A-", g2:4.0,l2:"A+", g3:4.0,l3:"A+", g4:4.0,l4:"A+", g5:3.75,l5:"A", g6:3.75,l6:"A", creditEarned:18, result:"P", cgpa:3.88},
-        {roll:"M250202024", name:"Anisur Rahman", g1:3.0,l1:"B", g2:2.25,l2:"C", g3:2.75,l3:"B-", g4:2.75,l4:"B-", g5:3.5,l5:"A-", g6:2.75,l6:"B-", creditEarned:18, result:"P", cgpa:2.83},
-        {roll:"M250202025", name:"Md.Tonmoy Islam", g1:0.0,l1:"F", g2:0.0,l2:"F", g3:0.0,l3:"F", g4:0.0,l4:"F", g5:0.0,l5:"F", g6:0.0,l6:"F", creditEarned:0, result:"NP", cgpa:0.0},
-        {roll:"M250202026", name:"Md.Hridoy Ali", g1:2.25,l1:"C", g2:2.5,l2:"C+", g3:3.25,l3:"B+", g4:3.5,l4:"A-", g5:3.25,l5:"B+", g6:2.25,l6:"C", creditEarned:18, result:"P", cgpa:2.83},
-        {roll:"M250202027", name:"Md. Mahamudul Hasan", g1:0.0,l1:"F", g2:0.0,l2:"F", g3:0.0,l3:"F", g4:0.0,l4:"F", g5:0.0,l5:"F", g6:0.0,l6:"F", creditEarned:0, result:"NP", cgpa:0.0},
-        {roll:"M250202028", name:"Md. Tariqul Islam", g1:3.5,l1:"A-", g2:3.75,l2:"A", g3:3.25,l3:"B+", g4:3.75,l4:"A", g5:3.25,l5:"B+", g6:2.75,l6:"B-", creditEarned:18, result:"P", cgpa:3.38},
-        {roll:"M250202029", name:"Mehedi Hasan", g1:0.0,l1:"F", g2:3.25,l2:"B+", g3:3.75,l3:"A", g4:3.25,l4:"B+", g5:3.25,l5:"B+", g6:2.5,l6:"C+", creditEarned:15, result:"NP", cgpa:2.67},
-        {roll:"M250202030", name:"Md. Jubayer Hossain", g1:3.0,l1:"B", g2:3.5,l2:"A-", g3:3.0,l3:"B", g4:0.0,l4:"F", g5:3.0,l5:"B", g6:2.75,l6:"B-", creditEarned:15, result:"CP", cgpa:2.54},
-        {roll:"M250202031", name:"Md Arif Hossain", g1:2.5,l1:"C+", g2:3.25,l2:"B+", g3:3.75,l3:"A", g4:0.0,l4:"F", g5:2.0,l5:"D", g6:2.5,l6:"C+", creditEarned:15, result:"CP", cgpa:2.33},
-        {roll:"M250202032", name:"Fatematul Zahan Naima", g1:2.75,l1:"B-", g2:3.0,l2:"B", g3:3.5,l3:"A-", g4:2.75,l4:"B-", g5:3.25,l5:"B+", g6:3.0,l6:"B", creditEarned:18, result:"P", cgpa:3.04},
-        {roll:"M250202033", name:"Puja Rani Saha", g1:2.5,l1:"C+", g2:2.75,l2:"B-", g3:3.25,l3:"B+", g4:3.0,l4:"B", g5:3.5,l5:"A-", g6:3.0,l6:"B", creditEarned:18, result:"P", cgpa:3.0},
-        {roll:"M250202034", name:"A.K.M Nazrul Islam", g1:0.0,l1:"F", g2:0.0,l2:"F", g3:0.0,l3:"F", g4:0.0,l4:"F", g5:0.0,l5:"F", g6:0.0,l6:"F", creditEarned:0, result:"NP", cgpa:0.0},
-        {roll:"M250202035", name:"Md Alimuddin Sardar", g1:3.5,l1:"A", g2:3.5,l2:"A", g3:4.0,l3:"A", g4:3.5,l4:"A-", g5:3.75,l5:"A", g6:3.75,l6:"A", creditEarned:18, result:"P", cgpa:3.67},
-        {roll:"M250202036", name:"Pabitra Chandra Das", g1:4.0,l1:"A+", g2:4.0,l2:"A+", g3:4.0,l3:"A+", g4:3.75,l4:"A", g5:4.0,l5:"A+", g6:4.0,l6:"A+", creditEarned:18, result:"P", cgpa:3.96},
-        {roll:"M250202037", name:"Dipan Dab Nath", g1:3.5,l1:"A", g2:3.25,l2:"B+", g3:3.25,l3:"B+", g4:3.75,l4:"A", g5:3.75,l5:"A", g6:3.5,l6:"A", creditEarned:18, result:"P", cgpa:3.5},
-        {roll:"M250202038", name:"Md Kausar Ahmed", g1:2.75,l1:"B", g2:3.0,l2:"B", g3:3.0,l3:"B", g4:3.0,l4:"B", g5:3.25,l5:"B+", g6:3.0,l6:"B", creditEarned:18, result:"P", cgpa:3.0},
-        {roll:"M250202039", name:"Md Ashiqur Rahaman", g1:0.0,l1:"F", g2:0.0,l2:"F", g3:0.0,l3:"F", g4:0.0,l4:"F", g5:0.0,l5:"F", g6:0.0,l6:"F", creditEarned:0, result:"NP", cgpa:0.0},
-        {roll:"M250202040", name:"Pratik Kumar Chanda", g1:0.0,l1:"F", g2:0.0,l2:"F", g3:0.0,l3:"F", g4:0.0,l4:"F", g5:0.0,l5:"F", g6:0.0,l6:"F", creditEarned:0, result:"NP", cgpa:0.0},
-        {roll:"M250202041", name:"Rubina Akter Jahana", g1:3.5,l1:"A-", g2:2.25,l2:"C", g3:3.25,l3:"B+", g4:3.5,l4:"A-", g5:3.5,l5:"A-", g6:3.5,l6:"A-", creditEarned:18, result:"P", cgpa:3.25},
-        {roll:"M250202042", name:"Kazi Mijanur Rahman", g1:3.0,l1:"B", g2:2.25,l2:"C", g3:4.0,l3:"A+", g4:3.75,l4:"A", g5:3.0,l5:"B", g6:2.25,l6:"C", creditEarned:18, result:"P", cgpa:3.04},
-        {roll:"M250202043", name:"Chayan Datta", g1:2.75,l1:"B-", g2:2.75,l2:"B-", g3:4.0,l3:"A+", g4:3.75,l4:"A", g5:3.25,l5:"B+", g6:3.0,l6:"B", creditEarned:18, result:"P", cgpa:3.25},
-        {roll:"M250202044", name:"Nur Mohammad", g1:0.0,l1:"F", g2:0.0,l2:"F", g3:0.0,l3:"F", g4:0.0,l4:"F", g5:0.0,l5:"F", g6:0.0,l6:"F", creditEarned:0, result:"NP", cgpa:0.0},
-        {roll:"M250202045", name:"Md. Zahidul Islam", g1:0.0,l1:"F", g2:0.0,l2:"F", g3:0.0,l3:"F", g4:0.0,l4:"F", g5:0.0,l5:"F", g6:0.0,l6:"F", creditEarned:0, result:"NP", cgpa:0.0},
-        {roll:"M250202046", name:"Shaikh Hridoy", g1:3.0,l1:"B", g2:2.75,l2:"B-", g3:4.0,l3:"A+", g4:3.25,l4:"B+", g5:4.0,l5:"A+", g6:3.25,l6:"B+", creditEarned:18, result:"P", cgpa:3.38},
-        {roll:"M250202047", name:"Saklain Mustaq", g1:3.0,l1:"B", g2:3.5,l2:"A-", g3:3.75,l3:"A", g4:3.25,l4:"B+", g5:3.25,l5:"B+", g6:3.5,l6:"A-", creditEarned:18, result:"P", cgpa:3.38},
-        {roll:"M250202048", name:"A.S.M. Sifat", g1:0.0,l1:"F", g2:2.25,l2:"C", g3:3.5,l3:"A-", g4:2.75,l4:"B-", g5:2.75,l5:"B-", g6:2.75,l6:"B-", creditEarned:15, result:"CP", cgpa:2.33},
-        {roll:"M250202049", name:"Md. Ruhul Amin", g1:2.0,l1:"D", g2:2.25,l2:"C", g3:4.0,l3:"A+", g4:2.25,l4:"C", g5:2.75,l5:"B-", g6:3.0,l6:"B", creditEarned:18, result:"P", cgpa:2.71},
-        {roll:"M230202025", name:"Md. Monir Hossain", g1:2.5,l1:"C+", g2:2.5,l2:"C+", g3:3.75,l3:"A", g4:2.25,l4:"C", g5:2.75,l5:"B-", g6:2.75,l6:"B-", creditEarned:18, result:"P", cgpa:2.75}
+        {roll:"M250202001", name:"Niger Sultana", g1:3.25, g2:2.5, g3:3.5, g4:3.25, g5:3.25, g6:3.0},
+        {roll:"M250202002", name:"Supt Das", g1:3.25, g2:3.25, g3:3.25, g4:3.5, g5:3.25, g6:3.5},
+        {roll:"M250202003", name:"Ashma Sathi", g1:3.25, g2:3.5, g3:4.0, g4:4.0, g5:3.5, g6:4.0},
+        {roll:"M250202004", name:"Saba Akter", g1:3.5, g2:3.0, g3:2.75, g4:3.5, g5:4.0, g6:3.5},
+        {roll:"M250202005", name:"Md. Solayman Hoque", g1:2.0, g2:2.5, g3:3.0, g4:3.25, g5:2.75, g6:3.0},
+        {roll:"M250202006", name:"Rezaul Haque", g1:2.75, g2:4.0, g3:2.75, g4:2.5, g5:4.0, g6:2.5},
+        {roll:"M250202007", name:"Nazir Rahman Abbassi", g1:3.5, g2:3.0, g3:2.75, g4:3.75, g5:4.0, g6:2.25},
+        {roll:"M250202008", name:"Mst. Antara Masuda", g1:3.25, g2:2.25, g3:2.75, g4:2.25, g5:2.5, g6:3.0},
+        {roll:"M250202009", name:"Md. Rifat Mahmud", g1:0.0, g2:0.0, g3:0.0, g4:0.0, g5:0.0, g6:0.0},
+        {roll:"M250202010", name:"Md. Mosfigur Rahman", g1:2.5, g2:2.75, g3:3.75, g4:2.5, g5:3.25, g6:3.25},
+        {roll:"M250202011", name:"Nadia Rahman", g1:3.0, g2:2.75, g3:3.25, g4:3.5, g5:3.0, g6:3.25},
+        {roll:"M250202012", name:"Aysha Akter Tuli", g1:2.75, g2:3.5, g3:4.0, g4:3.5, g5:3.25, g6:3.5},
+        {roll:"M250202013", name:"Anik Proshad Roy", g1:3.0, g2:3.25, g3:3.75, g4:3.25, g5:2.75, g6:3.5},
+        {roll:"M250202014", name:"Absar Uddin", g1:2.25, g2:2.25, g3:2.75, g4:3.0, g5:3.25, g6:0.0},
+        {roll:"M250202015", name:"Md. Asaduzzaman Limon", g1:2.25, g2:3.25, g3:4.0, g4:3.0, g5:3.5, g6:3.25},
+        {roll:"M250202016", name:"Md. Rabiul Alam", g1:3.75, g2:3.25, g3:3.75, g4:3.75, g5:4.0, g6:3.5},
+        {roll:"M250202017", name:"Silvia Arin", g1:3.5, g2:2.75, g3:3.0, g4:3.5, g5:4.0, g6:3.25},
+        {roll:"M250202018", name:"Tariqul Islam", g1:0.0, g2:0.0, g3:0.0, g4:0.0, g5:0.0, g6:0.0},
+        {roll:"M250202019", name:"Shahanaj Akter", g1:3.75, g2:3.5, g3:2.75, g4:3.0, g5:3.5, g6:3.5},
+        {roll:"M250202020", name:"Arpita Datta", g1:3.0, g2:2.75, g3:2.75, g4:3.5, g5:3.75, g6:3.75},
+        {roll:"M250202021", name:"Sajib Chandra Paul", g1:2.75, g2:3.0, g3:3.5, g4:3.5, g5:4.0, g6:3.25},
+        {roll:"M250202022", name:"Fatema Khan", g1:0.0, g2:0.0, g3:0.0, g4:0.0, g5:0.0, g6:0.0},
+        {roll:"M250202023", name:"Shib Prasad Acharjee", g1:3.5, g2:4.0, g3:4.0, g4:4.0, g5:3.75, g6:3.75},
+        {roll:"M250202024", name:"Anisur Rahman", g1:3.0, g2:2.25, g3:2.75, g4:2.75, g5:3.5, g6:2.75},
+        {roll:"M250202025", name:"Md.Tonmoy Islam", g1:0.0, g2:0.0, g3:0.0, g4:0.0, g5:0.0, g6:0.0},
+        {roll:"M250202026", name:"Md.Hridoy Ali", g1:2.25, g2:2.5, g3:3.25, g4:3.5, g5:3.25, g6:2.25},
+        {roll:"M250202027", name:"Md. Mahamudul Hasan", g1:0.0, g2:0.0, g3:0.0, g4:0.0, g5:0.0, g6:0.0},
+        {roll:"M250202028", name:"Md. Tariqul Islam", g1:3.5, g2:3.75, g3:3.25, g4:3.75, g5:3.25, g6:2.75},
+        {roll:"M250202029", name:"Sajjat Hasan", g1:0.0, g2:3.25, g3:3.75, g4:3.25, g5:3.25, g6:2.5},
+        {roll:"M250202030", name:"Md. Jubayer Hossain", g1:3.0, g2:3.5, g3:3.0, g4:0.0, g5:3.0, g6:2.75},
+        {roll:"M250202031", name:"Md Arif Hossain", g1:2.5, g2:3.25, g3:3.75, g4:0.0, g5:2.0, g6:2.5},
+        {roll:"M250202032", name:"Fatematul Zahan Naima", g1:2.75, g2:3.0, g3:3.5, g4:2.75, g5:3.25, g6:3.0},
+        {roll:"M250202033", name:"Puja Rani Saha", g1:2.5, g2:2.75, g3:3.25, g4:3.0, g5:3.5, g6:3.0},
+        {roll:"M250202034", name:"A.K.M Nazrul Islam", g1:0.0, g2:0.0, g3:0.0, g4:0.0, g5:0.0, g6:0.0},
+        {roll:"M250202035", name:"Md Alimuddin Sardar", g1:3.5, g2:3.5, g3:4.0, g4:3.5, g5:3.75, g6:3.75},
+        {roll:"M250202036", name:"Pabitra Chandra Das", g1:4.0, g2:4.0, g3:4.0, g4:3.75, g5:4.0, g6:4.0},
+        {roll:"M250202037", name:"Dipan Dab Nath", g1:3.5, g2:3.25, g3:3.25, g4:3.75, g5:3.75, g6:3.5},
+        {roll:"M250202038", name:"Md Kausar Ahmed", g1:2.75, g2:3.0, g3:3.0, g4:3.0, g5:3.25, g6:3.0},
+        {roll:"M250202039", name:"Md Ashiqur Rahaman", g1:0.0, g2:0.0, g3:0.0, g4:0.0, g5:0.0, g6:0.0},
+        {roll:"M250202040", name:"Pratik Kumar Chanda", g1:0.0, g2:0.0, g3:0.0, g4:0.0, g5:0.0, g6:0.0},
+        {roll:"M250202041", name:"Rubina Akter Jahana", g1:3.5, g2:2.25, g3:3.25, g4:3.5, g5:3.5, g6:3.5},
+        {roll:"M250202042", name:"Kazi Mijanur Rahman", g1:3.0, g2:2.25, g3:4.0, g4:3.75, g5:3.0, g6:2.25},
+        {roll:"M250202043", name:"Chayan Datta", g1:2.75, g2:2.75, g3:4.0, g4:3.75, g5:3.25, g6:3.0},
+        {roll:"M250202044", name:"Nur Mohammad", g1:0.0, g2:0.0, g3:0.0, g4:0.0, g5:0.0, g6:0.0},
+        {roll:"M250202045", name:"Md. Zahidul Islam", g1:0.0, g2:0.0, g3:0.0, g4:0.0, g5:0.0, g6:0.0},
+        {roll:"M250202046", name:"Shaikh Hridoy", g1:3.0, g2:2.75, g3:4.0, g4:3.25, g5:4.0, g6:3.25},
+        {roll:"M250202047", name:"Saklain Mustaq", g1:3.0, g2:3.5, g3:3.75, g4:3.25, g5:3.25, g6:3.5},
+        {roll:"M250202048", name:"A.S.M. Sifat", g1:0.0, g2:2.25, g3:3.5, g4:2.75, g5:2.75, g6:2.75},
+        {roll:"M250202049", name:"Md. Ruhul Amin", g1:2.0, g2:2.25, g3:4.0, g4:2.25, g5:2.75, g6:3.0},
+        {roll:"M230202025", name:"Md. Monir Hossain", g1:2.5, g2:2.5, g3:3.75, g4:2.25, g5:2.75, g6:2.75}
     ];
 
+    // Recalculate function
     function recalcStudent(s) {
         let points = [s.g1, s.g2, s.g3, s.g4, s.g5, s.g6];
         let total = 0, count = 0;
         points.forEach(p => { if(p > 0) { total += p; count++; } });
         s.creditEarned = count * 3;
         s.cgpa = count === 0 ? 0 : parseFloat((total / count).toFixed(2));
-        const gpToLetter = (gp) => {
-            if(gp === 4.0) return "A+";
-            if(gp >= 3.75) return "A";
-            if(gp >= 3.5) return "A-";
-            if(gp >= 3.25) return "B+";
-            if(gp >= 3.0) return "B";
-            if(gp >= 2.75) return "B-";
-            if(gp >= 2.5) return "C+";
-            if(gp >= 2.0) return "C";
-            if(gp >= 1.0) return "D";
-            return "F";
-        };
         s.l1 = gpToLetter(s.g1); s.l2 = gpToLetter(s.g2); s.l3 = gpToLetter(s.g3);
         s.l4 = gpToLetter(s.g4); s.l5 = gpToLetter(s.g5); s.l6 = gpToLetter(s.g6);
-        
         let hasF = [s.g1,s.g2,s.g3,s.g4,s.g5,s.g6].some(g => g === 0);
         if(s.creditEarned === 18 && !hasF) s.result = "P";
         else if(s.creditEarned === 0) s.result = "NP";
         else s.result = "CP";
     }
     studentsData.forEach(s => recalcStudent(s));
+
+    // Update legend with counts
+    function updateLegend() {
+        let pCount = 0, npCount = 0, cpCount = 0;
+        studentsData.forEach(s => {
+            if(s.result === "P") pCount++;
+            else if(s.result === "NP") npCount++;
+            else if(s.result === "CP") cpCount++;
+        });
+        const legendBar = document.getElementById('legendBar');
+        legendBar.innerHTML = `
+            <div class="legend-item"><span class="badge-sample badge-p">✔ PASS (P)</span> <span>Full credits, no F - ${pCount} students</span></div>
+            <div class="legend-item"><span class="badge-sample badge-np">❌ N.P</span> <span>Not Promoted (all F) - ${npCount} students</span></div>
+            <div class="legend-item"><span class="badge-sample badge-cp">⚠️ C.P</span> <span>Conditional Promoted (some F) - ${cpCount} students</span></div>
+        `;
+    }
 
     let adminMode = false;
     let currentFilter = "";
@@ -447,7 +547,7 @@
         if(letter === 'C+') return 'grade-Cplus';
         if(letter === 'C') return 'grade-C';
         if(letter === 'D') return 'grade-D';
-        return 'grade-default';
+        return '';
     }
 
     function getSortedData() {
@@ -456,10 +556,7 @@
             s.name.toLowerCase().includes(currentFilter)
         );
         if(currentSort === "gpa") {
-            filtered.sort((a,b) => b.cgpa - a.cgpa);
-        } else {
-            // default order: Monir Hossain last (already in array order)
-            return filtered;
+            return [...filtered].sort((a,b) => b.cgpa - a.cgpa);
         }
         return filtered;
     }
@@ -469,38 +566,63 @@
         const thead = document.getElementById('tableHeader');
         const tbody = document.getElementById('tableBody');
         
-        const headers = ["SL", "Roll No", "Student's Name", "PMTH 5101", "PMTH 5102", "PMTH 5103", "PMTH 5104", "PMTH 5106", "PMTH 5107", "Credit Earned", "CGPA", "Result"];
-        let headerRow = '<tr>';
-        headers.forEach(h => { headerRow += `<th>${h}</th>`; });
-        headerRow += '</tr>';
+        // Build headers with editable subject codes and names
+        let headerRow = '<tr><th>SL</th><th>Roll No</th><th>Student\'s Name</th>';
+        for(let i = 0; i < subjectCodes.length; i++) {
+            if(adminMode) {
+                headerRow += `<th class="editable-subcode" data-subidx="${i}">
+                    <input type="text" value="${subjectCodes[i]}" style="width:80px; text-align:center; background:#fffef5;" class="subcode-input">
+                    <br><sub class="editable-subname" data-subnameidx="${i}">
+                        <input type="text" value="${subjectNames[i]}" placeholder="Subject Name" style="width:100px; text-align:center; background:#fffef5; margin-top:2px;" class="subname-input">
+                    </sub>
+                </th>`;
+            } else {
+                headerRow += `<th>${subjectCodes[i]}<br><sub>${subjectNames[i]}</sub></th>`;
+            }
+        }
+        headerRow += '<th>Credits</th><th>CGPA</th><th>Result</th></tr>';
         thead.innerHTML = headerRow;
+        
+        // Add event listeners for subject code/name edits in admin mode
+        if(adminMode) {
+            document.querySelectorAll('.subcode-input').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const idx = parseInt(input.closest('th').dataset.subidx);
+                    subjectCodes[idx] = input.value;
+                    renderTable();
+                });
+            });
+            document.querySelectorAll('.subname-input').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const idx = parseInt(input.closest('th').querySelector('.editable-subname').dataset.subnameidx);
+                    subjectNames[idx] = input.value;
+                    renderTable();
+                });
+            });
+        }
         
         let rowsHtml = '';
         data.forEach((stu, idx) => {
-            const gradeClass1 = getGradeClass(stu.l1);
-            const gradeClass2 = getGradeClass(stu.l2);
-            const gradeClass3 = getGradeClass(stu.l3);
-            const gradeClass4 = getGradeClass(stu.l4);
-            const gradeClass5 = getGradeClass(stu.l5);
-            const gradeClass6 = getGradeClass(stu.l6);
+            const grades = [stu.g1, stu.g2, stu.g3, stu.g4, stu.g5, stu.g6];
+            const letters = [stu.l1, stu.l2, stu.l3, stu.l4, stu.l5, stu.l6];
+            const gradeClasses = letters.map(l => getGradeClass(l));
             
             let resultBadge = '';
             if(stu.result === 'P') resultBadge = '<span class="badge-p">✔ PASS</span>';
             else if(stu.result === 'NP') resultBadge = '<span class="badge-np">❌ N.P</span>';
-            else if(stu.result === 'CP') resultBadge = '<span class="badge-p badge-cp">⚠️ C.P</span>';
+            else if(stu.result === 'CP') resultBadge = '<span class="badge-cp">⚠️ C.P</span>';
             
             if(adminMode) {
                 rowsHtml += `<tr data-roll="${stu.roll}">
                     <td>${idx+1}</td>
-                    <td class="editable-text" data-field="roll"><input type="text" value="${stu.roll}" style="width:110px;"></td>
-                    <td class="editable-text" data-field="name"><input type="text" value="${stu.name}" style="width:150px;"></td>
-                    <td class="${gradeClass1} editable-cell" data-field="g1"><input type="number" step="0.25" value="${stu.g1}" style="width:65px;"> <small>(${stu.l1})</small></td>
-                    <td class="${gradeClass2} editable-cell" data-field="g2"><input type="number" step="0.25" value="${stu.g2}" style="width:65px;"> <small>(${stu.l2})</small></td>
-                    <td class="${gradeClass3} editable-cell" data-field="g3"><input type="number" step="0.25" value="${stu.g3}" style="width:65px;"> <small>(${stu.l3})</small></td>
-                    <td class="${gradeClass4} editable-cell" data-field="g4"><input type="number" step="0.25" value="${stu.g4}" style="width:65px;"> <small>(${stu.l4})</small></td>
-                    <td class="${gradeClass5} editable-cell" data-field="g5"><input type="number" step="0.25" value="${stu.g5}" style="width:65px;"> <small>(${stu.l5})</small></td>
-                    <td class="${gradeClass6} editable-cell" data-field="g6"><input type="number" step="0.25" value="${stu.g6}" style="width:65px;"> <small>(${stu.l6})</small></td>
-                    <td>${stu.creditEarned}</td>
+                    <td class="editable-text" data-field="roll"><input type="text" value="${stu.roll}" style="width:105px;"></td>
+                    <td class="editable-text" data-field="name"><input type="text" value="${stu.name}" style="width:140px;"></td>`;
+                for(let i = 0; i < 6; i++) {
+                    rowsHtml += `<td class="${gradeClasses[i]} editable-cell" data-field="g${i+1}">
+                        <input type="number" step="0.25" value="${grades[i]}" style="width:60px;"> <small>(${letters[i]})</small>
+                    </td>`;
+                }
+                rowsHtml += `<td>${stu.creditEarned}</td>
                     <td><strong>${stu.cgpa.toFixed(2)}</strong></td>
                     <td>${resultBadge}</td>
                 </tr>`;
@@ -508,14 +630,11 @@
                 rowsHtml += `<tr>
                     <td>${idx+1}</td>
                     <td><strong>${stu.roll}</strong></td>
-                    <td style="text-align:left">${stu.name}</td>
-                    <td class="${gradeClass1}">${stu.g1.toFixed(2)} (${stu.l1})</td>
-                    <td class="${gradeClass2}">${stu.g2.toFixed(2)} (${stu.l2})</td>
-                    <td class="${gradeClass3}">${stu.g3.toFixed(2)} (${stu.l3})</td>
-                    <td class="${gradeClass4}">${stu.g4.toFixed(2)} (${stu.l4})</td>
-                    <td class="${gradeClass5}">${stu.g5.toFixed(2)} (${stu.l5})</td>
-                    <td class="${gradeClass6}">${stu.g6.toFixed(2)} (${stu.l6})</td>
-                    <td>${stu.creditEarned}</td>
+                    <td style="text-align:left">${stu.name}</td>`;
+                for(let i = 0; i < 6; i++) {
+                    rowsHtml += `<td class="${gradeClasses[i]}">${grades[i].toFixed(2)} (${letters[i]})</td>`;
+                }
+                rowsHtml += `<td>${stu.creditEarned}</td>
                     <td><strong>${stu.cgpa.toFixed(2)}</strong></td>
                     <td>${resultBadge}</td>
                 </tr>`;
@@ -531,6 +650,9 @@
                 input.addEventListener('change', handleTextEdit);
             });
         }
+        
+        // Update legend with counts
+        updateLegend();
     }
 
     function handleGradeEdit(e) {
@@ -543,7 +665,6 @@
         if(isNaN(newVal)) newVal = 0;
         if(newVal > 4) newVal = 4;
         if(newVal < 0) newVal = 0;
-        
         const student = studentsData.find(s => s.roll === roll);
         if(student) {
             student[field] = newVal;
@@ -559,19 +680,15 @@
         const oldRoll = tr.dataset.roll;
         const field = td.dataset.field;
         const newVal = input.value.trim();
-        
         const student = studentsData.find(s => s.roll === oldRoll);
         if(student) {
-            if(field === 'roll') {
-                student.roll = newVal;
-                tr.dataset.roll = newVal;
-            } else if(field === 'name') {
-                student.name = newVal;
-            }
+            if(field === 'roll') student.roll = newVal;
+            else if(field === 'name') student.name = newVal;
             renderTable();
         }
     }
 
+    // Modal and admin toggle
     const modal = document.getElementById('passwordModal');
     const adminToggle = document.getElementById('adminToggleBtn');
     const verifyBtn = document.getElementById('verifyPasswordBtn');
@@ -579,68 +696,35 @@
     const modalError = document.getElementById('modalError');
     const editInstruction = document.getElementById('editInstruction');
 
-    function enableAdmin() {
-        adminMode = true;
-        adminToggle.classList.add('active');
-        adminToggle.innerText = '🛡️ অ্যাডমিন অন';
-        editInstruction.style.display = 'block';
-        renderTable();
-    }
-    function disableAdmin() {
-        adminMode = false;
-        adminToggle.classList.remove('active');
-        adminToggle.innerText = '🔒 অ্যাডমিন প্যানেল';
-        editInstruction.style.display = 'none';
-        renderTable();
-    }
+    function enableAdmin() { adminMode = true; adminToggle.classList.add('active'); adminToggle.innerText = '🛡️ অ্যাডমিন অন'; editInstruction.style.display = 'block'; renderTable(); }
+    function disableAdmin() { adminMode = false; adminToggle.classList.remove('active'); adminToggle.innerText = '🔒 অ্যাডমিন প্যানেল'; editInstruction.style.display = 'none'; renderTable(); }
     
-    adminToggle.addEventListener('click', () => {
-        if(adminMode) disableAdmin();
-        else modal.style.display = 'flex';
-    });
-    
+    adminToggle.addEventListener('click', () => { if(adminMode) disableAdmin(); else modal.style.display = 'flex'; });
     verifyBtn.addEventListener('click', () => {
-        if(passInput.value === ADMIN_PASSWORD) {
-            modal.style.display = 'none';
-            enableAdmin();
-        } else modalError.innerText = '❌ ভুল পাসওয়ার্ড!';
+        if(passInput.value === ADMIN_PASSWORD) { modal.style.display = 'none'; enableAdmin(); }
+        else modalError.innerText = '❌ Wrong password!';
     });
     modal.addEventListener('click', (e) => { if(e.target === modal) modal.style.display = 'none'; });
     
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        currentFilter = e.target.value.toLowerCase();
-        renderTable();
-    });
-    
+    document.getElementById('searchInput').addEventListener('input', (e) => { currentFilter = e.target.value.toLowerCase(); renderTable(); });
     const defaultBtn = document.getElementById('sortByDefaultBtn');
     const gpaBtn = document.getElementById('sortByGpaBtn');
-    
-    defaultBtn.addEventListener('click', () => {
-        currentSort = "default";
-        defaultBtn.classList.add('active');
-        gpaBtn.classList.remove('active');
-        renderTable();
-    });
-    gpaBtn.addEventListener('click', () => {
-        currentSort = "gpa";
-        gpaBtn.classList.add('active');
-        defaultBtn.classList.remove('active');
-        renderTable();
-    });
+    defaultBtn.addEventListener('click', () => { currentSort = "default"; defaultBtn.classList.add('active'); gpaBtn.classList.remove('active'); renderTable(); });
+    gpaBtn.addEventListener('click', () => { currentSort = "gpa"; gpaBtn.classList.add('active'); defaultBtn.classList.remove('active'); renderTable(); });
     
     document.getElementById('downloadPDFBtn').addEventListener('click', () => {
         const element = document.getElementById('reportContainer');
-        const opt = {
-            margin: [0.3, 0.3, 0.3, 0.3],
-            filename: 'Fall2025_Final_Result_FullPage.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
+        html2pdf().set({ 
+            margin: [0.3, 0.3, 0.3, 0.3], 
+            filename: 'Fall2025_MSc_Result.pdf', 
+            image: { type: 'jpeg', quality: 0.98 }, 
             html2canvas: { scale: 2, letterRendering: true, useCORS: true },
-            jsPDF: { unit: 'in', format: 'a2', orientation: 'landscape' }
-        };
-        html2pdf().set(opt).from(element).save();
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' } 
+        }).from(element).save();
     });
     
     renderTable();
+    updateLegend();
 </script>
 </body>
 </html>
