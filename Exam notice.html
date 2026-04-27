@@ -121,11 +121,12 @@ footer {
 </div>
 
 <script>
-const URL = "https://script.google.com/macros/s/AKfycbyMD6bS0sCZs1pQdlx679xJscSBm4RuhmMOV7vZ4WW1DvDmxWQ8E25xdRy4TJFITUt7fg/exec";
+// ==================== UPDATED GOOGLE SHEETS URL ====================
+const URL = "https://script.google.com/macros/s/AKfycbzsqrPCMeSLFjWiBq1tRyYkgtWMoTLHsFY-UiGtWObGWWc4bjvYZ2YyHykMSs7QusV1yw/exec";
 
-const CACHE_KEY = "exam_cache_v3";
+const CACHE_KEY = "exam_cache_v4";
 
-// 🎨 render function
+// 🎨 render function - same design as before
 function render(data){
   const first = document.getElementById("firstMid");
   const second = document.getElementById("secondMid");
@@ -133,39 +134,75 @@ function render(data){
   first.innerHTML = "";
   second.innerHTML = "";
 
-  data.forEach(item=>{
-    const [type, subject, date, time, topic, img] = item;
+  if (!data || data.length === 0) {
+    first.innerHTML = '<p class="loading">📭 No exam notices found</p>';
+    second.innerHTML = '<p class="loading">📭 No exam notices found</p>';
+    return;
+  }
 
-    const formattedDate = new Date(date).toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric"
-    });
+  data.forEach(item=>{
+    let type, subject, date, time, topic, img;
+    
+    if (Array.isArray(item)) {
+      [type, subject, date, time, topic, img] = item;
+    } else {
+      type = item.type || item[0] || "";
+      subject = item.subject || item[1] || "";
+      date = item.date || item[2] || "";
+      time = item.time || item[3] || "";
+      topic = item.topic || item[4] || "";
+      img = item.image || item[5] || "";
+    }
+
+    let formattedDate = date;
+    try {
+      if (date && date !== "") {
+        const dateObj = new Date(date);
+        if (!isNaN(dateObj.getTime())) {
+          formattedDate = dateObj.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+          });
+        }
+      }
+    } catch(e) {
+      formattedDate = date;
+    }
 
     const card = `
       <div class="card">
-        <div class="subject">📘 ${subject}</div>
-        <div>📅 ${formattedDate}</div>
-        <div>⏰ ${time}</div>
-        <div class="topic">${topic}</div>
+        <div class="subject">📘 ${subject || "Unknown"}</div>
+        <div>📅 ${formattedDate || "Date not set"}</div>
+        <div>⏰ ${time || "Time not set"}</div>
+        <div class="topic">${topic || ""}</div>
         ${img ? `<img src="${img}" loading="lazy">` : ""}
       </div>
     `;
 
-    if(type === "1st"){
+    if(type === "1st" || type === "1st Mid" || type === "1"){
       first.innerHTML += card;
-    } else {
+    } else if(type === "2nd" || type === "2nd Mid" || type === "2"){
       second.innerHTML += card;
     }
   });
+
+  if (first.innerHTML === "") first.innerHTML = '<p class="loading">📭 No 1st Mid notices</p>';
+  if (second.innerHTML === "") second.innerHTML = '<p class="loading">📭 No 2nd Mid notices</p>';
 }
 
 // ⚡ load from cache instantly
 function loadCache(){
   const cache = localStorage.getItem(CACHE_KEY);
   if(cache){
-    render(JSON.parse(cache));
+    try {
+      render(JSON.parse(cache));
+      return true;
+    } catch(e) {
+      return false;
+    }
   }
+  return false;
 }
 
 // 🔄 fetch new data
@@ -173,12 +210,28 @@ async function fetchData(){
   try{
     const res = await fetch(URL);
     const data = await res.json();
-
-    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-    render(data);
+    
+    let examData = [];
+    
+    if (data.exams && Array.isArray(data.exams)) {
+      examData = data.exams;
+    } else if (Array.isArray(data)) {
+      examData = data;
+    } else {
+      examData = [];
+    }
+    
+    localStorage.setItem(CACHE_KEY, JSON.stringify(examData));
+    render(examData);
 
   }catch(err){
     console.log("Error:", err);
+    if (!loadCache()) {
+      const first = document.getElementById("firstMid");
+      const second = document.getElementById("secondMid");
+      first.innerHTML = '<p class="loading">⚠️ Failed to load data</p>';
+      second.innerHTML = '<p class="loading">⚠️ Failed to load data</p>';
+    }
   }
 }
 
@@ -191,7 +244,7 @@ setInterval(fetchData, 30000);
 </script>
     
 <footer>
-  © 2026 Exam Notice System  
+  © 2026 Exam Notice System
 </footer>
 </body>
 </html>
