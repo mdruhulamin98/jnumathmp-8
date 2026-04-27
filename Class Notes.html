@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Class Notes | PDF Library</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f7fafc;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding: 2rem 1.5rem;
+            color: #1a2c3e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            background: linear-gradient(145deg, #1e5f6e, #2b8c7a);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .header p {
+            color: #5b6e8c;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            border-bottom: 2px solid #cbdde9;
+            display: inline-block;
+            padding-bottom: 6px;
+        }
+
+        /* Grid - full width */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 28px;
+            width: 100%;
+        }
+
+        /* Full screen centering for loading - Works on ALL devices */
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70vh;
+            width: 100%;
+            flex: 1;
+        }
+
+        .loading-card {
+            text-align: center;
+            padding: 50px 30px;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #e2e8f0;
+            border-top-color: #1e6b5e;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e2f3d;
+            margin-top: 10px;
+        }
+
+        .loading-subtext {
+            font-size: 0.85rem;
+            color: #6b7c93;
+            margin-top: 8px;
+        }
+
+        .retry-btn {
+            background: #1e6b5e;
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .retry-btn:hover {
+            background: #0f5447;
+            transform: scale(0.98);
+        }
+
+        /* Card Styles */
+        .card {
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #e9edf2;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
+            border-color: #cbdde9;
+        }
+
+        .card-header {
+            padding: 1.5rem 1.5rem 0.8rem 1.5rem;
+            border-left: 4px solid;
+        }
+
+        .subject-icon {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .subject-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e2f3d;
+            line-height: 1.3;
+            margin: 8px 0 6px;
+        }
+
+        /* বড় করা Instructor Name */
+        .instructor {
+            font-size: 1rem;
+            background: #ecf7f4;
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 50px;
+            color: #2b7a6a;
+            font-weight: 600;
+            margin: 14px 0 10px;
+        }
+
+        /* বড় করা Class Note Label - সব জায়গায় বড় ফন্ট */
+        .class-note-label {
+            background: #fef4e8;
+            padding: 12px 20px;
+            margin: 15px 0 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #c26b2e;
+        }
+
+        .class-note-label span {
+            font-size: 1.1rem;
+        }
+
+        .pdf-status {
+            background: #f8fafc;
+            padding: 14px 18px;
+            margin: 18px 0 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            border: 1px solid #eef2f6;
+        }
+
+        .pdf-status span:first-child {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .pdf-count {
+            font-weight: 700;
+            font-size: 0.9rem;
+            background: white;
+            padding: 6px 14px;
+            border-radius: 50px;
+            color: #2b8c7a;
+        }
+
+        .btn-view {
+            width: 100%;
+            background: #1e6b5e;
+            color: white;
+            border: none;
+            padding: 15px 0;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: inherit;
+            margin: 20px 0 8px;
+        }
+
+        .btn-view:hover {
+            background: #0f5447;
+            transform: scale(0.97);
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-card {
+            background: white;
+            width: 90%;
+            max-width: 520px;
+            max-height: 80vh;
+            border-radius: 36px;
+            overflow: hidden;
+            box-shadow: 0 30px 45px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.2s ease;
+        }
+
+        .popup-header {
+            background: #1e2f3d;
+            color: white;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popup-header h3 {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .close-popup {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .pdf-list {
+            padding: 1rem 1.2rem 1.8rem;
+            max-height: 55vh;
+            overflow-y: auto;
+        }
+
+        .pdf-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            background: #f8fafc;
+            margin: 10px 0;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e2edf0;
+        }
+
+        .pdf-item:hover {
+            background: #eef3fa;
+            transform: translateX(6px);
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 2rem;
+            color: #8ba0b5;
+        }
+
+        /* PDF Viewer */
+        .viewer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .viewer-box {
+            background: #f5f5f0;
+            width: 95%;
+            height: 92%;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .viewer-header {
+            background: #2d3748;
+            padding: 14px 22px;
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            align-items: center;
+        }
+
+        .viewer-header span {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .viewer-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .viewer-header button:hover {
+            color: #ffb5a7;
+        }
+
+        .viewer-iframe {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: white;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            font-size: 0.75rem;
+            color: #7a8ea8;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* মোবাইল ডিভাইসের জন্য স্পেসিফিক স্টাইল */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .subject-name {
+                font-size: 1.3rem;
+            }
+            .instructor {
+                font-size: 0.9rem;
+                padding: 6px 16px;
+            }
+            .class-note-label {
+                font-size: 0.9rem;
+                padding: 10px 16px;
+                gap: 8px;
+            }
+            .class-note-label span {
+                font-size: 1rem;
+            }
+            .pdf-status span:first-child {
+                font-size: 0.85rem;
+            }
+            .pdf-count {
+                font-size: 0.85rem;
+                padding: 5px 12px;
+            }
+            .btn-view {
+                font-size: 0.9rem;
+                padding: 13px 0;
+            }
+            .loading-card {
+                padding: 40px 25px;
+                width: 85%;
+            }
+            .loading-text {
+                font-size: 1rem;
+            }
+            .viewer-box {
+                width: 98%;
+                height: 95%;
+            }
+            .viewer-header span {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* ছোট মোবাইলের জন্য */
+        @media (max-width: 480px) {
+            .subject-name {
+                font-size: 1.2rem;
+            }
+            .instructor {
+                font-size: 0.85rem;
+                padding: 5px 14px;
+            }
+            .class-note-label {
+                font-size: 0.85rem;
+                padding: 8px 14px;
+            }
+            .card-header {
+                padding: 1.2rem 1.2rem 0.6rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📘 Class Notes Hub</h1>
+        <p>6 Subjects · PDF materials for each course</p>
+    </div>
+
+    <div id="subjectsGrid" class="subjects-grid">
+        <!-- Loading will appear here -->
+    </div>
+    <footer>📖 Click "View PDFs" → choose any PDF from the list to read online</footer>
+</div>
+
+<!-- Popup for PDF list -->
+<div id="pdfListPopup" class="popup">
+    <div class="popup-card">
+        <div class="popup-header">
+            <h3 id="popupTitle">Select PDF</h3>
+            <button class="close-popup" id="closePopupBtn">✕</button>
+        </div>
+        <div id="pdfListContent" class="pdf-list"></div>
+    </div>
+</div>
+
+<!-- PDF Viewer Modal -->
+<div id="pdfViewer" class="viewer">
+    <div class="viewer-box">
+        <div class="viewer-header">
+            <span id="viewerTitle">PDF Viewer</span>
+            <button id="closeViewerBtn">✕</button>
+        </div>
+        <iframe id="pdfIframe" class="viewer-iframe" title="PDF viewer"></iframe>
+    </div>
+</div>
+
+<script>
+    // ==================== CONFIGURATION ====================
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsqrPCMeSLFjWiBq1tRyYkgtWMoTLHsFY-UiGtWObGWWc4bjvYZ2YyHykMSs7QusV1yw/exec";
+    
+    const colorMap = {
+        "Lattice Theory & Boolean Algebra": "#8b5cf6",
+        "Dynamical Systems": "#f59e0b",
+        "Advanced Numerical Analysis": "#10b981",
+        "Advanced Mathematical Methods": "#3b82f6",
+        "Fluid Dynamics and Heat Transfer": "#ec4898",
+        "Biomathematics": "#14b8a6"
+    };
+    
+    const iconMap = {
+        "Lattice Theory & Boolean Algebra": "🧩",
+        "Dynamical Systems": "🌀",
+        "Advanced Numerical Analysis": "📊",
+        "Advanced Mathematical Methods": "📐",
+        "Fluid Dynamics and Heat Transfer": "🔥",
+        "Biomathematics": "🧬"
+    };
+
+    let classNotesData = [];
+
+    const popup = document.getElementById("pdfListPopup");
+    const popupTitle = document.getElementById("popupTitle");
+    const pdfListDiv = document.getElementById("pdfListContent");
+    const closePopupBtn = document.getElementById("closePopupBtn");
+    const viewer = document.getElementById("pdfViewer");
+    const viewerIframe = document.getElementById("pdfIframe");
+    const viewerTitle = document.getElementById("viewerTitle");
+    const closeViewerBtn = document.getElementById("closeViewerBtn");
+
+    // ==================== CONVERT ANY PDF URL TO DIRECT EMBEDDABLE LINK ====================
+    function getDirectPDFUrl(url) {
+        if (!url || url.trim() === "") return null;
+        
+        let cleanUrl = url.trim();
+        
+        // Case 1: Google Drive Share Link
+        if (cleanUrl.includes("drive.google.com")) {
+            let fileId = null;
+            
+            let match = cleanUrl.match(/\/d\/([^\/]+)/);
+            if (match) fileId = match[1];
+            
+            if (!fileId) {
+                match = cleanUrl.match(/id=([^&]+)/);
+                if (match) fileId = match[1];
+            }
+            
+            if (!fileId) {
+                match = cleanUrl.match(/\/file\/d\/([^\/]+)/);
+                if (match) fileId = match[1];
+            }
+            
+            if (fileId) {
+                return `https://drive.google.com/file/d/${fileId}/preview`;
+            }
+        }
+        
+        // Case 2: Direct PDF link
+        if (cleanUrl.toLowerCase().endsWith(".pdf")) {
+            return cleanUrl;
+        }
+        
+        // Case 3: Other URLs
+        return `https://docs.google.com/viewer?embedded=true&url=${encodeURIComponent(cleanUrl)}`;
+    }
+
+    // ==================== SHOW LOADING - PERFECT CENTER ====================
+    function showLoading() {
+        const grid = document.getElementById("subjectsGrid");
+        grid.innerHTML = `
+            <div class="loading-container">
+                <div class="loading-card">
+                    <div class="spinner"></div>
+                    <div class="loading-text">📚 ডাটা লোড হচ্ছে...</div>
+                    <div class="loading-subtext">দয়া করে অপেক্ষা করুন</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function showError(message) {
+        const grid = document.getElementById("subjectsGrid");
+        grid.innerHTML = `
+            <div class="loading-container">
+                <div class="loading-card">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">⚠️</div>
+                    <div class="loading-text" style="color: #dc2626;">${message}</div>
+                    <div class="loading-subtext">দয়া করে আপনার সংযোগ চেক করুন</div>
+                    <button class="retry-btn" onclick="loadClassNotes()">🔄 আবার চেষ্টা করুন</button>
+                </div>
+            </div>
+        `;
+    }
+
+    // ==================== LOAD DATA FROM GOOGLE SHEET ====================
+    async function loadClassNotes() {
+        showLoading();
+        
+        try {
+            const response = await fetch(SCRIPT_URL);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            
+            const data = await response.json();
+            console.log("Data loaded:", data);
+            
+            if (data.classes && Array.isArray(data.classes)) {
+                classNotesData = processClassData(data.classes);
+                renderCards();
+            } else {
+                throw new Error("No classes data found in the response");
+            }
+        } catch(e) {
+            console.error("Load error:", e);
+            showError(e.message || "ডাটা লোড করতে ব্যর্থ হয়েছে");
+        }
+    }
+
+    function processClassData(rawData) {
+        const subjectMap = new Map();
+        
+        rawData.forEach(row => {
+            if (!row || row.length < 2) return;
+            
+            const subject = (row[0] || "Unknown Subject").trim();
+            const instructor = (row[1] || "Unknown Instructor").trim();
+            const title = (row[2] || "Untitled").trim();
+            const description = (row[3] || "").trim();
+            let pdfUrl = (row[4] || "").trim();
+            const image = (row[5] || "").trim();
+            
+            if (!subjectMap.has(subject)) {
+                subjectMap.set(subject, {
+                    name: subject,
+                    instructor: instructor,
+                    pdfs: []
+                });
+            }
+            
+            if (pdfUrl) {
+                subjectMap.get(subject).pdfs.push({
+                    name: title,
+                    description: description,
+                    url: pdfUrl,
+                    image: image
+                });
+            }
+        });
+        
+        const orderedSubjects = [
+            "Lattice Theory & Boolean Algebra",
+            "Dynamical Systems",
+            "Advanced Numerical Analysis",
+            "Advanced Mathematical Methods",
+            "Fluid Dynamics and Heat Transfer",
+            "Biomathematics"
+        ];
+        
+        const result = [];
+        for (const subjectName of orderedSubjects) {
+            if (subjectMap.has(subjectName)) {
+                result.push(subjectMap.get(subjectName));
+            } else {
+                result.push({
+                    name: subjectName,
+                    instructor: getInstructorForSubject(subjectName),
+                    pdfs: []
+                });
+            }
+        }
+        
+        return result;
+    }
+    
+    function getInstructorForSubject(subjectName) {
+        const instructors = {
+            "Lattice Theory & Boolean Algebra": "Ayub Sir (Professor)",
+            "Dynamical Systems": "MD. ASRAFUL ISLAM (Assistant Professor)",
+            "Advanced Numerical Analysis": "Dr. Sidhartha Bhowmick (Professor)",
+            "Advanced Mathematical Methods": "DR. SHARABAN THOHURA (Professor)",
+            "Fluid Dynamics and Heat Transfer": "Dr. Md. Sarwar Alam (Professor)",
+            "Biomathematics": "Dr. Md. Shariful Alam (Professor)"
+        };
+        return instructors[subjectName] || "Faculty Member";
+    }
+
+    // ==================== RENDER CARDS ====================
+    function renderCards() {
+        const grid = document.getElementById("subjectsGrid");
+        grid.innerHTML = "";
+        
+        if (classNotesData.length === 0) {
+            grid.innerHTML = '<div class="loading-container"><div class="loading-card"><div style="font-size: 2rem;">📭</div><div class="loading-text">কোন ক্লাস নোট পাওয়া যায়নি</div><div class="loading-subtext">দয়া করে আপনার Google Sheet এ ডাটা যোগ করুন</div></div></div>';
+            return;
+        }
+        
+        classNotesData.forEach((subject, index) => {
+            const borderColor = colorMap[subject.name] || "#1e6b5e";
+            const icon = iconMap[subject.name] || "📚";
+            const pdfCount = subject.pdfs.length;
+            
+            const card = document.createElement("div");
+            card.className = "card";
+            
+            card.innerHTML = `
+                <div class="card-header" style="border-left-color: ${borderColor};">
+                    <div class="subject-icon">${icon}</div>
+                    <div class="subject-name">${escapeHtml(subject.name)}</div>
+                    <div class="instructor">👨‍🏫 ${escapeHtml(subject.instructor)}</div>
+                    <div class="class-note-label">
+                        <span>📓</span> Class Note · ${pdfCount} materials
+                    </div>
+                </div>
+                <div style="padding: 0 1.5rem 1.2rem;">
+                    <div class="pdf-status">
+                        <span>📄 PDF Collection</span>
+                        <span class="pdf-count">${pdfCount} item(s)</span>
+                    </div>
+                    <button class="btn-view" data-index="${index}">
+                        🔍 View PDFs (${pdfCount})
+                    </button>
+                </div>
+            `;
+            
+            grid.appendChild(card);
+        });
+        
+        document.querySelectorAll(".btn-view").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const index = parseInt(btn.getAttribute("data-index"));
+                if (!isNaN(index) && classNotesData[index]) {
+                    showPDFList(classNotesData[index]);
+                }
+            });
+        });
+    }
+
+    // ==================== PDF LIST POPUP ====================
+    function showPDFList(subject) {
+        popupTitle.innerText = `${subject.name} · PDF Materials`;
+        pdfListDiv.innerHTML = "";
+        
+        if (subject.pdfs.length === 0) {
+            pdfListDiv.innerHTML = '<div class="empty-message">📭 No PDF files available for this subject.</div>';
+        } else {
+            subject.pdfs.forEach((pdf, idx) => {
+                const item = document.createElement("div");
+                item.className = "pdf-item";
+                item.innerHTML = `
+                    <div>📘</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:500;">${escapeHtml(pdf.name)}</div>
+                        ${pdf.description ? `<div style="font-size:0.7rem; color:#6b7c93;">${escapeHtml(pdf.description.substring(0, 80))}${pdf.description.length > 80 ? '...' : ''}</div>` : ''}
+                    </div>
+                    <div>➡️</div>
+                `;
+                item.onclick = () => {
+                    popup.style.display = "none";
+                    openPDFViewer(subject, pdf);
+                };
+                pdfListDiv.appendChild(item);
+            });
+        }
+        
+        popup.style.display = "flex";
+        document.body.style.overflow = "hidden";
+    }
+
+    // ==================== OPEN PDF ====================
+    function openPDFViewer(subject, pdf) {
+        let directUrl = getDirectPDFUrl(pdf.url);
+        
+        viewerTitle.innerText = `${subject.name} – ${pdf.name}`;
+        
+        if (directUrl) {
+            viewerIframe.src = directUrl;
+        } else {
+            const errorContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body {
+                            font-family: 'Segoe UI', sans-serif;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                            margin: 0;
+                            background: #f5f5f0;
+                            text-align: center;
+                        }
+                        .error-box {
+                            max-width: 500px;
+                            padding: 40px;
+                        }
+                        h3 { color: #dc2626; margin-bottom: 15px; }
+                        p { color: #6b7280; margin-bottom: 10px; }
+                        .url { font-size: 12px; word-break: break-all; background: #f0f0f0; padding: 10px; border-radius: 8px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="error-box">
+                        <h3>⚠️ PDF URL Not Found</h3>
+                        <p>No valid PDF URL provided for "${escapeHtml(pdf.name)}"</p>
+                        <p>Please check your Google Sheet and add a valid PDF link in the PDF URL column.</p>
+                        <div class="url">Provided URL: ${escapeHtml(pdf.url) || "(empty)"}</div>
+                    </div>
+                </body>
+                </html>
+            `;
+            viewerIframe.src = "data:text/html;charset=utf-8," + encodeURIComponent(errorContent);
+        }
+        
+        viewer.style.display = "flex";
+        document.body.style.overflow = "hidden";
+    }
+
+    function closePopup() {
+        popup.style.display = "none";
+        document.body.style.overflow = "auto";
+    }
+
+    function closeViewer() {
+        viewer.style.display = "none";
+        viewerIframe.src = "";
+        document.body.style.overflow = "auto";
+    }
+
+    closePopupBtn.onclick = closePopup;
+    closeViewerBtn.onclick = closeViewer;
+
+    window.onclick = (e) => {
+        if (e.target === popup) closePopup();
+        if (e.target === viewer) closeViewer();
+    };
+
+    function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/[&<>]/g, (m) => {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // ==================== INITIALIZE ====================
+    loadClassNotes();
+</script>
+</body>
+</html>
