@@ -1,170 +1,579 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Panel - Exam Notices</title>
+  <title>Admin Panel-Exam Notices & Class Notes</title>
+    
+<link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+    
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: Arial; background:#eef2f5; padding:20px; }
-    form { max-width:400px; margin:auto; background:white; padding:15px; border-radius:10px; box-shadow:0 0 5px #ccc; }
-    input, textarea, select { width:100%; padding:8px; margin-bottom:10px; box-sizing: border-box;}
-    button { width:100%; padding:10px; border:none; cursor:pointer; border-radius:5px; }
-    .add-btn { background:#0ea5e9; color:white; }
-    .edit-btn { background:#f59e0b; color:white; }
-    .delete-btn { background:#ef4444; color:white; }
-    table { width:100%; border-collapse:collapse; margin-top:20px; }
-    th, td { border:1px solid #ccc; padding:8px; font-size:13px; }
-    th { background:#0ea5e9; color:white; }
-      pre {
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap: break-word;
-}
-    img.exam-image { max-width: 80px; border-radius: 5px; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #eef2f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #1e2f3d;
+    }
+
+    /* Tab Navigation */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 12px 28px;
+      border: none;
+      background: #cbd5e1;
+      cursor: pointer;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: 0.2s;
+      font-size: 1rem;
+    }
+
+    .tab-btn.active {
+      background: #0ea5e9;
+      color: white;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    /* Form Styles */
+    .form-card {
+      max-width: 550px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .form-card h3 {
+      margin-bottom: 18px;
+      color: #0ea5e9;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      cursor: pointer;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .add-btn { background: #0ea5e9; color: white; }
+    .edit-btn { background: #f59e0b; color: white; padding: 6px 12px; width: auto; margin: 2px; }
+    .delete-btn { background: #ef4444; color: white; padding: 6px 12px; width: auto; margin: 2px; }
+    .view-btn { background: #10b981; color: white; padding: 6px 12px; width: auto; margin: 2px; text-decoration: none; display: inline-block; border-radius: 20px; font-size: 12px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      border: 1px solid #e2e8f0;
+      padding: 10px 8px;
+      font-size: 13px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #0ea5e9;
+      color: white;
+      font-weight: 600;
+    }
+
+    img.exam-image, img.class-image {
+      max-width: 60px;
+      border-radius: 8px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 25px 0 10px;
+      color: #1e2f3d;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: inherit;
+      font-size: 12px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #64748b;
+    }
+
+    @media (max-width: 768px) {
+      th, td { font-size: 11px; padding: 6px; }
+      .tab-btn { padding: 8px 16px; font-size: 14px; }
+      .form-card { margin: 0 10px; }
+    }
   </style>
 </head>
 <body>
+<div class="container">
+  <h2>📋 Admin Control Panel</h2>
 
-<h2 style="text-align:center">📋 Admin Panel</h2>
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="exam">📝 Exam Notices</button>
+    <button class="tab-btn" data-tab="class">📚 Class Notes</button>
+  </div>
 
-<form id="sheetForm">
-  <select id="type" required>
-    <option value="1st">1st Mid</option>
-    <option value="2nd">2nd Mid</option>
-  </select>
-  <input type="text" id="subject" placeholder="Subject" required>
-  <input type="date" id="date" required>
-  <input type="text" id="time" placeholder="Exam Time" required>
-  <textarea id="topic" rows="4" placeholder="Topics"></textarea>
-  <label>Upload Image (optional):</label>
-  <input type="file" id="image" accept="image/*">
-  <input type="hidden" id="editIndex">
-  <button type="submit" class="add-btn">Save</button>
-</form>
+  <!-- ==================== TAB 1: EXAM NOTICES ==================== -->
+  <div id="examTab" class="tab-pane active">
+    <div class="form-card">
+      <h3>📅 Add / Edit Exam Notice</h3>
+      <form id="examForm">
+        <select id="exam_type" required>
+          <option value="1st">1st Mid</option>
+          <option value="2nd">2nd Mid</option>
+          <option value="Final">Final</option>
+        </select>
+        <input type="text" id="exam_subject" placeholder="Subject Name" required>
+        <input type="date" id="exam_date" required>
+        <input type="text" id="exam_time" placeholder="Exam Time (e.g., 10:00 AM - 1:00 PM)" required>
+        <textarea id="exam_topic" rows="3" placeholder="Topics / Syllabus"></textarea>
+        <label>📷 Upload Image (optional):</label>
+        <input type="file" id="exam_image" accept="image/*">
+        <input type="hidden" id="exam_editIndex">
+        <button type="submit" class="add-btn">💾 Save Exam Notice</button>
+      </form>
+    </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Type</th><th>Subject</th><th>Date</th><th>Time</th><th>Topic</th><th>Image</th><th>Action</th>
-    </tr>
-  </thead>
-  <tbody id="dataBody"></tbody>
-</table>
+    <div class="section-title">📋 Exam Notice List</div>
+    <div style="overflow-x: auto;">
+      <table id="examTable">
+        <thead>
+          <tr><th>Type</th><th>Subject</th><th>Date</th><th>Time</th><th>Topics</th><th>Image</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="examBody">
+          <tr><td colspan="7" class="loading">Loading data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 2: CLASS NOTES ==================== -->
+  <div id="classTab" class="tab-pane">
+    <div class="form-card">
+      <h3>📖 Add / Edit Class Note</h3>
+      <form id="classForm">
+        <input type="text" id="class_subject" placeholder="Subject Name" required>
+        <input type="text" id="class_instructor" placeholder="Instructor Name" required>
+        <input type="text" id="class_title" placeholder="Note Title (e.g., Lecture 01)" required>
+        <textarea id="class_description" rows="3" placeholder="Short description / topics covered"></textarea>
+        <label>🔗 PDF Link / File URL:</label>
+        <input type="text" id="class_pdfUrl" placeholder="https://... or /pdfs/...">
+        <label>📷 Upload Image (optional):</label>
+        <input type="file" id="class_image" accept="image/*">
+        <input type="hidden" id="class_editIndex">
+        <button type="submit" class="add-btn">💾 Save Class Note</button>
+      </form>
+    </div>
+
+    <div class="section-title">📚 Class Notes List</div>
+    <div style="overflow-x: auto;">
+      <table id="classTable">
+        <thead>
+          <tr><th>Subject</th><th>Instructor</th><th>Title</th><th>Description</th><th>PDF</th><th>Image</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="classBody">
+          <tr><td colspan="7" class="loading">Loading data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 <script>
-const URL = "https://script.google.com/macros/s/AKfycbyMD6bS0sCZs1pQdlx679xJscSBm4RuhmMOV7vZ4WW1DvDmxWQ8E25xdRy4TJFITUt7fg/exec";
+  // ==================== YOUR GOOGLE APPS SCRIPT URL ====================
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsqrPCMeSLFjWiBq1tRyYkgtWMoTLHsFY-UiGtWObGWWc4bjvYZ2YyHykMSs7QusV1yw/exec";
+  
+  // Data stores
+  let examData = [];
+  let classData = [];
 
-const form = document.getElementById("sheetForm");
-let examData = [];
-
-async function loadData() {
-  const res = await fetch(URL);
-  examData = await res.json();
-  renderTable();
-}
-
-function renderTable(){
-  const body = document.getElementById("dataBody");
-  body.innerHTML = "";
-
-  examData.forEach((item, index) => {
-    const [type, subject, date, time, topic, imageUrl] = item;
-
-    const dateObj = new Date(date);
-    const formattedDate = dateObj.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric"
-    });
-
-    body.innerHTML += `
-      <tr>
-        <td>${type}</td>
-        <td>${subject}</td>
-        <td>${formattedDate}</td>
-        <td>${time}</td>
-        <td>${topic}</td>
-        <td>${imageUrl ? `<img class="exam-image" src="${imageUrl}">` : ""}</td>
-        <td>
-          <button class="edit-btn" onclick="editData(${index})">Edit</button>
-          <button class="delete-btn" onclick="deleteData(${index})">Delete</button>
-        </td>
-      </tr>`;
-  });
-}
-
-form.addEventListener("submit", async function(e){
-  e.preventDefault();
-
-  const index = document.getElementById("editIndex").value;
-
-  const type = document.getElementById("type").value;
-  const subject = document.getElementById("subject").value;
-  const date = document.getElementById("date").value;
-  const time = document.getElementById("time").value;
-  const topic = document.getElementById("topic").value;
-
-  const imageInput = document.getElementById("image");
-
-  // 🔥 Fix: keep old image if not changed
-  let imageBase64 = examData[index]?.[5] || "";
-
-  if(imageInput.files.length > 0){
-    const file = imageInput.files[0];
-    imageBase64 = await toBase64(file);
+  // ==================== LOAD DATA FROM GOOGLE SHEET ====================
+  async function loadAllData() {
+    try {
+      showLoading(true);
+      const response = await fetch(SCRIPT_URL);
+      const data = await response.json();
+      
+      console.log("Loaded data:", data);
+      
+      if (data.exams && Array.isArray(data.exams)) {
+        examData = data.exams;
+      } else {
+        examData = [];
+      }
+      
+      if (data.classes && Array.isArray(data.classes)) {
+        classData = data.classes;
+      } else {
+        classData = [];
+      }
+      
+      renderExamTable();
+      renderClassTable();
+    } catch(e) {
+      console.error("Load error:", e);
+      document.getElementById("examBody").innerHTML = '<tr><td colspan="7" style="color:red;">Error loading data. Check console.</td></tr>';
+      document.getElementById("classBody").innerHTML = '<tr><td colspan="7" style="color:red;">Error loading data. Check console.</td></tr>';
+    } finally {
+      showLoading(false);
+    }
   }
 
-  const payload = {
-    type,
-    subject,
-    date,
-    time,
-    topic,
-    image: imageBase64,
-    action: index !== "" ? "edit" : "add",
-    index: index
-  };
-
-  await fetch(URL, {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
-
-  form.reset();
-  document.getElementById("editIndex").value = "";
-  loadData();
-});
-
-function toBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-}
-
-function editData(index){
-  const item = examData[index];
-
-  document.getElementById("type").value = item[0];
-  document.getElementById("subject").value = item[1];
-  document.getElementById("date").value = item[2];
-  document.getElementById("time").value = item[3];
-  document.getElementById("topic").value = item[4];
-  document.getElementById("editIndex").value = index;
-}
-
-async function deleteData(index){
-  if(confirm("Are you sure to delete?")){
-    await fetch(URL, {
-      method: "POST",
-      body: JSON.stringify({action: "delete", index: index})
-    });
-    loadData();
+  function showLoading(show) {
+    // Optional: show/hide loader
   }
-}
 
-loadData();
+  // ==================== RENDER EXAM TABLE ====================
+  function renderExamTable() {
+    const tbody = document.getElementById("examBody");
+    if (!tbody) return;
+    
+    if (examData.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">📭 No exam notices found. Add one above.</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = "";
+
+    examData.forEach((item, idx) => {
+      // Handle array or object format
+      let type, subject, date, time, topic, imageUrl;
+      
+      if (Array.isArray(item)) {
+        [type, subject, date, time, topic, imageUrl] = item;
+      } else {
+        type = item.type || "";
+        subject = item.subject || "";
+        date = item.date || "";
+        time = item.time || "";
+        topic = item.topic || "";
+        imageUrl = item.image || "";
+      }
+      
+      const formattedDate = date ? new Date(date).toLocaleDateString("en-GB", {
+        day: "2-digit", month: "long", year: "numeric"
+      }) : date;
+
+      tbody.innerHTML += `
+        <tr>
+          <td>${escapeHtml(type || "")}</td>
+          <td>${escapeHtml(subject || "")}</td>
+          <td>${escapeHtml(formattedDate || "")}</td>
+          <td>${escapeHtml(time || "")}</td>
+          <td><pre>${escapeHtml(topic || "")}</pre></td>
+          <td>${imageUrl ? `<img class="exam-image" src="${imageUrl}" onclick="window.open(this.src)">` : "—"}</td>
+          <td>
+            <button class="edit-btn" onclick="editExam(${idx})">✏️ Edit</button>
+            <button class="delete-btn" onclick="deleteExam(${idx})">🗑️ Delete</button>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  // ==================== RENDER CLASS TABLE ====================
+  function renderClassTable() {
+    const tbody = document.getElementById("classBody");
+    if (!tbody) return;
+    
+    if (classData.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">📭 No class notes found. Add one above.</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = "";
+
+    classData.forEach((item, idx) => {
+      let subject, instructor, title, description, pdfUrl, imageUrl;
+      
+      if (Array.isArray(item)) {
+        [subject, instructor, title, description, pdfUrl, imageUrl] = item;
+      } else {
+        subject = item.subject || "";
+        instructor = item.instructor || "";
+        title = item.title || "";
+        description = item.description || "";
+        pdfUrl = item.pdfUrl || "";
+        imageUrl = item.image || "";
+      }
+
+      tbody.innerHTML += `
+        <tr>
+          <td>${escapeHtml(subject || "")}</td>
+          <td>${escapeHtml(instructor || "")}</td>
+          <td>${escapeHtml(title || "")}</td>
+          <td><pre>${escapeHtml(description || "")}</pre></td>
+          <td>${pdfUrl ? `<a href="${pdfUrl}" target="_blank" class="view-btn">📄 View PDF</a>` : "—"}</td>
+          <td>${imageUrl ? `<img class="class-image" src="${imageUrl}" onclick="window.open(this.src)">` : "—"}</td>
+          <td>
+            <button class="edit-btn" onclick="editClass(${idx})">✏️ Edit</button>
+            <button class="delete-btn" onclick="deleteClass(${idx})">🗑️ Delete</button>
+           </td>
+        </tr>
+      `;
+    });
+  }
+
+  // ==================== EXAM CRUD ====================
+  document.getElementById("examForm")?.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    const editIndex = document.getElementById("exam_editIndex").value;
+    const type = document.getElementById("exam_type").value;
+    const subject = document.getElementById("exam_subject").value;
+    const date = document.getElementById("exam_date").value;
+    const time = document.getElementById("exam_time").value;
+    const topic = document.getElementById("exam_topic").value;
+    const imageInput = document.getElementById("exam_image");
+    
+    let imageBase64 = "";
+    
+    // Keep old image if exists and no new image selected
+    if (editIndex !== "" && examData[editIndex]) {
+      const oldData = examData[editIndex];
+      const oldImage = Array.isArray(oldData) ? oldData[5] : oldData.image;
+      if (oldImage && imageInput.files.length === 0) {
+        imageBase64 = oldImage;
+      }
+    }
+    
+    if (imageInput.files.length > 0) {
+      imageBase64 = await toBase64(imageInput.files[0]);
+    }
+    
+    const payload = {
+      sheet: "exams",
+      action: editIndex !== "" ? "edit" : "add",
+      index: editIndex,
+      data: { type, subject, date, time, topic, image: imageBase64 }
+    };
+    
+    await saveToServer(payload);
+    
+    document.getElementById("examForm").reset();
+    document.getElementById("exam_editIndex").value = "";
+    await loadAllData();
+  });
+
+  async function deleteExam(index) {
+    if (confirm("Delete this exam notice?")) {
+      const payload = {
+        sheet: "exams",
+        action: "delete",
+        index: index
+      };
+      await saveToServer(payload);
+      await loadAllData();
+    }
+  }
+
+  function editExam(index) {
+    const item = examData[index];
+    if (Array.isArray(item)) {
+      document.getElementById("exam_type").value = item[0] || "";
+      document.getElementById("exam_subject").value = item[1] || "";
+      document.getElementById("exam_date").value = item[2] || "";
+      document.getElementById("exam_time").value = item[3] || "";
+      document.getElementById("exam_topic").value = item[4] || "";
+    } else {
+      document.getElementById("exam_type").value = item.type || "";
+      document.getElementById("exam_subject").value = item.subject || "";
+      document.getElementById("exam_date").value = item.date || "";
+      document.getElementById("exam_time").value = item.time || "";
+      document.getElementById("exam_topic").value = item.topic || "";
+    }
+    document.getElementById("exam_editIndex").value = index;
+    document.getElementById("exam_image").value = "";
+  }
+
+  // ==================== CLASS CRUD ====================
+  document.getElementById("classForm")?.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    const editIndex = document.getElementById("class_editIndex").value;
+    const subject = document.getElementById("class_subject").value;
+    const instructor = document.getElementById("class_instructor").value;
+    const title = document.getElementById("class_title").value;
+    const description = document.getElementById("class_description").value;
+    const pdfUrl = document.getElementById("class_pdfUrl").value;
+    const imageInput = document.getElementById("class_image");
+    
+    let imageBase64 = "";
+    
+    if (editIndex !== "" && classData[editIndex]) {
+      const oldData = classData[editIndex];
+      const oldImage = Array.isArray(oldData) ? oldData[5] : oldData.image;
+      if (oldImage && imageInput.files.length === 0) {
+        imageBase64 = oldImage;
+      }
+    }
+    
+    if (imageInput.files.length > 0) {
+      imageBase64 = await toBase64(imageInput.files[0]);
+    }
+    
+    const payload = {
+      sheet: "classes",
+      action: editIndex !== "" ? "edit" : "add",
+      index: editIndex,
+      data: { subject, instructor, title, description, pdfUrl, image: imageBase64 }
+    };
+    
+    await saveToServer(payload);
+    
+    document.getElementById("classForm").reset();
+    document.getElementById("class_editIndex").value = "";
+    await loadAllData();
+  });
+
+  async function deleteClass(index) {
+    if (confirm("Delete this class note?")) {
+      const payload = {
+        sheet: "classes",
+        action: "delete",
+        index: index
+      };
+      await saveToServer(payload);
+      await loadAllData();
+    }
+  }
+
+  function editClass(index) {
+    const item = classData[index];
+    if (Array.isArray(item)) {
+      document.getElementById("class_subject").value = item[0] || "";
+      document.getElementById("class_instructor").value = item[1] || "";
+      document.getElementById("class_title").value = item[2] || "";
+      document.getElementById("class_description").value = item[3] || "";
+      document.getElementById("class_pdfUrl").value = item[4] || "";
+    } else {
+      document.getElementById("class_subject").value = item.subject || "";
+      document.getElementById("class_instructor").value = item.instructor || "";
+      document.getElementById("class_title").value = item.title || "";
+      document.getElementById("class_description").value = item.description || "";
+      document.getElementById("class_pdfUrl").value = item.pdfUrl || "";
+    }
+    document.getElementById("class_editIndex").value = index;
+    document.getElementById("class_image").value = "";
+  }
+
+  // ==================== HELPER FUNCTIONS ====================
+  async function saveToServer(payload) {
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors", // For cross-origin requests
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload)
+      });
+      return await response.json();
+    } catch(e) {
+      console.error("Save error:", e);
+      alert("Data saved! Refresh to see changes.");
+    }
+  }
+
+  function toBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  function escapeHtml(str) {
+    if (!str) return "";
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  // ==================== TAB SWITCHING ====================
+  function initTabs() {
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.getAttribute('data-tab');
+        
+        tabs.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        document.getElementById('examTab').classList.remove('active');
+        document.getElementById('classTab').classList.remove('active');
+        
+        if (tabId === 'exam') {
+          document.getElementById('examTab').classList.add('active');
+        } else {
+          document.getElementById('classTab').classList.add('active');
+        }
+      });
+    });
+  }
+
+  // Initialize everything
+  initTabs();
+  loadAllData();
 </script>
 
 </body>
