@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Dr. Md. Sarwar Alam (Professor) Video | ভিডিও লাইব্রেরি</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #fff5e8 0%, #fff0e0 100%);
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #d35400 0%, #e67e22 100%);
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .instructor-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            padding: 0.5rem 1.5rem;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .sub {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 0.8rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #e67e22;
+            font-weight: 500;
+            background: #f8fafc;
+            margin: 2rem;
+            border-radius: 1.5rem;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        .video-card {
+            background: #ffffff;
+            border-radius: 1.2rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #ffe0b5;
+        }
+
+        .video-card:hover {
+            transform: translateY(-4px);
+            border-color: #e67e22;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            background: #f1f5f9;
+        }
+
+        .video-info {
+            padding: 1rem;
+        }
+
+        .video-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #1e293b;
+            margin-bottom: 0.3rem;
+        }
+
+        .video-subject {
+            display: inline-block;
+            background: #fff0e0;
+            color: #d35400;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-desc {
+            font-size: 0.75rem;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        .duration {
+            margin-top: 0.6rem;
+            font-size: 0.7rem;
+            color: #e67e22;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .stats {
+            background: #fef3e8;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 500;
+            color: #d35400;
+            border-top: 1px solid #ffe0b5;
+        }
+
+        .video-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-container {
+            width: 92%;
+            max-width: 1100px;
+            background: #0f172a;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            animation: fadeUp 0.25s ease;
+        }
+
+        @keyframes fadeUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .popup-header {
+            background: #1e293b;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .popup-title {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .popup-instructor {
+            font-size: 0.8rem;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+
+        .close-popup {
+            background: #e53e3e;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 30px;
+            font-size: 1.3rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        .video-frame {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border: none;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            .video-grid { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📘Fluid Dynamics and Heat Transfer</h1>
+        <div class="instructor-badge">🎬 Dr. Md. Sarwar Alam (Professor) — ভিডিও ক্লাস</div>
+        <div class="sub">ক্লিক করলে ভিডিও সরাসরি  চালু হবে</div>
+    </div>
+
+    <div id="loadingMessage" class="loading">
+       🔄 ভিডিও লোড হচ্ছে, দয়া করে অপেক্ষা করুন......
+    </div>
+
+    <div id="videoGrid" class="video-grid"></div>
+    <div id="stats" class="stats" style="display: none;"></div>
+</div>
+
+<div id="videoPopup" class="video-popup">
+    <div class="popup-container">
+        <div class="popup-header">
+            <div>
+                <div class="popup-title" id="popupTitle"></div>
+                <div class="popup-instructor" id="popupInstructor"></div>
+            </div>
+            <button class="close-popup" onclick="closeVideoPopup()">✕</button>
+        </div>
+        <div class="video-container" id="videoContainer">
+            <iframe id="videoFrame" class="video-frame" src="" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwWs7FE3OSa9U6nuCPpKzEn1YKDRAGaLkevT8k74529SCCtTyMxGIVJYEX8Ra_YbwOMHg/exec';
+    const TARGET_INSTRUCTOR = "Dr. Md. Sarwar Alam (Professor)";
+    let videos = [];
+
+    // ডিফল্ট থাম্বনেইল
+    const DEFAULT_THUMBNAIL = 'data:image/svg+xml,%3Csvg xmlns="Image-1.png" viewBox="0 0 400 225"%3E%3Crect width="400" height="225" fill="%231e293b"/%3E%3Ccircle cx="200" cy="112" r="40" fill="%23f97316"/%3E%3Cpolygon points="185,92 185,132 225,112" fill="white"/%3E%3Ctext x="200" y="180" font-family="Arial" font-size="16" fill="%2394a3b8" text-anchor="middle"%3E🎬 ভিডিও%3C/text%3E%3C/svg%3E';
+
+    // ভিডিও URL কে এম্বেডযোগ্য ফরম্যাটে রূপান্তর
+    function getEmbedUrl(url) {
+        if (!url) return null;
+        
+        // ইউটিউব
+        if (url.includes('youtube.com/watch?v=')) {
+            let videoId = new URL(url).searchParams.get('v');
+            return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+        }
+        if (url.includes('youtu.be/')) {
+            let videoId = url.split('youtu.be/')[1].split('?')[0];
+            return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+        }
+        
+        // গুগল ড্রাইভ
+        if (url.includes('drive.google.com')) {
+            let fileId = null;
+            let match = url.match(/\/d\/([^\/]+)/);
+            if (match) fileId = match[1];
+            match = url.match(/id=([^&]+)/);
+            if (match) fileId = match[1];
+            if (fileId) {
+                return `https://drive.google.com/file/d/${fileId}/preview`;
+            }
+        }
+        
+        // সরাসরি MP4 বা অন্যান্য
+        if (url.match(/\.(mp4|webm|ogg)$/i)) {
+            return url;
+        }
+        
+        return url;
+    }
+
+    async function fetchVideos() {
+        const loadingDiv = document.getElementById('loadingMessage');
+        try {
+            const response = await fetch(API_URL);
+            const data = await response.json();
+            console.log('API Response:', data);
+            
+            let videoRows = data.VideoLibrary || [];
+            if (videoRows.length === 0) throw new Error("VideoLibrary অ্যারে পাওয়া যায়নি।");
+            
+            for (let row of videoRows) {
+                if (row.length < 6) continue;
+                const instructor = (row[2] || "").trim();
+                if (instructor.toLowerCase().includes(TARGET_INSTRUCTOR.toLowerCase())) {
+                    let rawUrl = (row[5] || "").trim();
+                    let embedUrl = getEmbedUrl(rawUrl);
+                    
+                    videos.push({
+                        title: row[0] || "ভিডিও",
+                        subject: row[1] || "",
+                        instructor: instructor,
+                        description: row[3] || "",
+                        embedUrl: embedUrl,
+                        duration: row[6] || "",
+                        thumbnail: row[7] || "",
+                        rawUrl: rawUrl
+                    });
+                }
+            }
+            
+            if (videos.length === 0) {
+                loadingDiv.innerHTML = '⚠️ Dr. Md. Sarwar Alam (Professor)-এর কোনো ভিডিও পাওয়া যায়নি।';
+                loadingDiv.style.background = '#fff0e6';
+            } else {
+                loadingDiv.style.display = 'none';
+                renderVideos();
+                document.getElementById('stats').style.display = 'block';
+                document.getElementById('stats').innerHTML = `🎥 মোট ${videos.length}টি ভিডিও`;
+            }
+        } catch (err) {
+            console.error(err);
+            loadingDiv.innerHTML = '❌ ডেটা আনতে ব্যর্থ। নেটওয়ার্ক বা API চেক করুন।';
+            loadingDiv.style.background = '#ffe0e0';
+        }
+    }
+
+    function renderVideos() {
+        const container = document.getElementById('videoGrid');
+        container.innerHTML = '';
+        
+        videos.forEach(video => {
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            card.onclick = () => openVideoPlayer(video);
+            
+            let thumbUrl = video.thumbnail;
+            if (!thumbUrl && video.rawUrl && video.rawUrl.includes('youtube')) {
+                let videoId = null;
+                if (video.rawUrl.includes('youtube.com/watch?v=')) {
+                    videoId = new URL(video.rawUrl).searchParams.get('v');
+                } else if (video.rawUrl.includes('youtu.be/')) {
+                    videoId = video.rawUrl.split('youtu.be/')[1].split('?')[0];
+                }
+                if (videoId) {
+                    thumbUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                }
+            }
+            if (!thumbUrl) {
+                thumbUrl = DEFAULT_THUMBNAIL;
+            }
+            
+            card.innerHTML = `
+                <img class="thumbnail" src="${escapeHtml(thumbUrl)}" loading="lazy" onerror="this.src='${DEFAULT_THUMBNAIL}'">
+                <div class="video-info">
+                    <div class="video-title">🎬 ${escapeHtml(video.title)}</div>
+                    <div class="video-subject">📚 ${escapeHtml(video.subject)}</div>
+                    ${video.description ? `<div class="video-desc">${escapeHtml(video.description.substring(0, 80))}${video.description.length > 80 ? '…' : ''}</div>` : ''}
+                    <div class="duration">⏱️ ${video.duration || 'ক্লিক করে দেখুন'}</div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function openVideoPlayer(video) {
+        if (!video.embedUrl) {
+            alert('ভিডিও লিংক সঠিক নয়।\n\nগুগল ড্রাইভের জন্য:\n1. ফাইলটিতে Right-click → Share\n2. General access → "Anyone with the link"\n3. Viewer রোল সিলেক্ট করুন');
+            return;
+        }
+        
+        document.getElementById('popupTitle').innerHTML = `🎬 ${escapeHtml(video.title)}`;
+        document.getElementById('popupInstructor').innerHTML = `👨‍🏫 ${escapeHtml(video.instructor)}`;
+        document.getElementById('videoFrame').src = video.embedUrl;
+        document.getElementById('videoPopup').style.display = 'flex';
+    }
+
+    function closeVideoPopup() {
+        document.getElementById('videoPopup').style.display = 'none';
+        document.getElementById('videoFrame').src = '';
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+    }
+
+    window.onclick = e => {
+        if (e.target === document.getElementById('videoPopup')) closeVideoPopup();
+    };
+
+    fetchVideos();
+</script>
+</body>
+</html>
