@@ -1,250 +1,512 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>📢 Exam Notice Board</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📢 Exam Notice Board · Final 2‑col</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    }
+    body {
+      background: #eef2f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    h1 {
+      text-align: center;
+      background: linear-gradient(145deg, #0ea5e9, #0284c7);
+      color: white;
+      padding: 1.2rem 1rem;
+      margin: 0;
+      font-size: 1.8rem;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+      flex: 1;
+      width: 100%;
+    }
 
-<link rel="icon" type="image/png" sizes="32x32" href="logo.png">
-  
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    /* TABS */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 3px solid #cbd5e1;
+      padding-bottom: 0.25rem;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #475569;
+      border-radius: 40px 40px 0 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #f1f5f9;
+      margin-bottom: -3px;
+      border: 2px solid transparent;
+      border-bottom: none;
+    }
+    .tab-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .tab-btn.active {
+      background: white;
+      color: #0284c7;
+      border-color: #cbd5e1;
+      border-bottom: 3px solid white;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+    }
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #eef2f5;
-  margin: 0;
-}
+    /* PANELS */
+    .tab-panel {
+      display: none;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 1.5rem 1.2rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      min-height: 320px;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+    .panel-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #0f172a;
+      border-left: 6px solid #0ea5e9;
+      padding-left: 1rem;
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+    }
 
-h1 {
-  text-align: center;
-  background: linear-gradient(45deg,#0ea5e9,#0284c7);
-  color: white;
-  padding: 15px;
-  margin: 0;
-}
+    /* FINAL: 2‑COLUMN LAYOUT */
+    .final-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.8rem;
+    }
+    @media (max-width: 760px) {
+      .final-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
 
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 20px;
-}
+    .final-col {
+      background: #f9fbfd;
+      border-radius: 18px;
+      padding: 0.8rem 0.8rem 0.2rem 0.8rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    }
 
-.column {
-  flex: 1 1 45%;
-  min-width: 300px;
-  background: #fff;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
+    .final-col .sub-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #0f172a;
+      border-bottom: 3px solid #0ea5e9;
+      padding-bottom: 0.4rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .batch-badge {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.15rem 0.9rem;
+      border-radius: 40px;
+      letter-spacing: 0.3px;
+    }
 
-@media (max-width: 768px) {
-  .column {
-    flex: 1 1 100%;
-  }
-}
+    /* cards inside final columns – slightly smaller */
+    .final-col .card {
+      border-left: 5px solid #0ea5e9;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 0.7rem 0.9rem;
+      margin-bottom: 0.8rem;
+      transition: 0.1s ease;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+      font-size: 0.88rem;
+    }
+    .final-col .card:hover {
+      transform: scale(1.01);
+      background: #f8fafc;
+      box-shadow: 0 4px 10px rgba(14, 165, 233, 0.06);
+    }
+    .final-col .subject {
+      font-weight: 700;
+      color: #0284c7;
+      font-size: 0.95rem;
+      margin-bottom: 0.1rem;
+    }
+    .final-col .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      font-size: 0.8rem;
+      color: #334155;
+      margin: 0.2rem 0 0.1rem 0;
+    }
+    .final-col .meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .final-col .topic {
+      font-size: 0.8rem;
+      color: #1e293b;
+      background: #f1f5f9;
+      padding: 0.25rem 0.6rem;
+      border-radius: 8px;
+      margin-top: 0.25rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
 
-h2 {
-  text-align: center;
-  background: #cbd5e1;
-  padding: 8px;
-  border-radius: 6px;
-  margin-top: 0;
-}
+    /* regular (non-final) cards */
+    .card {
+      border-left: 6px solid #0ea5e9;
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.2rem;
+      transition: 0.15s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .card:hover {
+      transform: scale(1.01);
+      background: #ffffff;
+      box-shadow: 0 6px 14px rgba(14, 165, 233, 0.10);
+    }
+    .subject {
+      font-weight: 700;
+      color: #0284c7;
+      font-size: 1.15rem;
+      margin-bottom: 0.2rem;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      font-size: 0.95rem;
+      color: #334155;
+      margin: 0.4rem 0 0.2rem 0;
+    }
+    .meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .topic {
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      color: #1e293b;
+      background: #f1f5f9;
+      padding: 0.5rem 0.8rem;
+      border-radius: 10px;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-top: 0.8rem;
+      border: 1px solid #e2e8f0;
+    }
+    .empty-msg {
+      text-align: center;
+      color: #64748b;
+      font-size: 1.1rem;
+      padding: 2.5rem 0;
+      background: #f1f5f9;
+      border-radius: 40px;
+    }
+    .loading {
+      text-align: center;
+      color: #64748b;
+      padding: 2rem 0;
+    }
 
-.card {
-  border-left: 5px solid #0ea5e9;
-  background: #f9f9f9;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 15px;
-  transition: 0.2s;
-  overflow: hidden;
-}
-
-.card:hover {
-  transform: scale(1.02);
-}
-
-.subject {
-  font-weight: bold;
-  color: #0284c7;
-  margin-bottom: 5px;
-}
-
-.topic {
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  font-size: 14px;
-  margin-top: 5px;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 6px;
-  margin-top: 8px;
-}
-
-.loading {
-  text-align: center;
-  color: gray;
-}
-
-footer {
-    text-align: center;
-    padding: 12px;
-    background: #0284c7;
-    color: white;
-    font-size: 14px;
-    margin-top: 20px;
-  }
-</style>
+    footer {
+      text-align: center;
+      padding: 1.2rem;
+      background: #0284c7;
+      color: white;
+      font-size: 0.95rem;
+      margin-top: 2rem;
+    }
+    @media (max-width: 640px) {
+      h1 { font-size: 1.5rem; }
+      .tab-btn { padding: 0.6rem 1.2rem; font-size: 1rem; }
+      .container { padding: 1rem 0.8rem; }
+      .tab-panel { padding: 1rem; }
+      .meta { gap: 0.8rem; }
+    }
+  </style>
 </head>
-
 <body>
-
 <h1>📢 Exam Notice Board</h1>
-
 <div class="container">
-  <div class="column">
-    <h2>1st Mid Exam</h2>
-    <div id="firstMid"><p class="loading">Loading...</p></div>
+  <div class="tabs" id="tabHeaders">
+    <button class="tab-btn active" data-tab="firstMid">📘 1st Mid</button>
+    <button class="tab-btn" data-tab="secondMid">📗 2nd Mid</button>
+    <button class="tab-btn" data-tab="finalExam">📕 Final Exam</button>
   </div>
 
-  <div class="column">
-    <h2>2nd Mid Exam</h2>
-    <div id="secondMid"><p class="loading">Loading...</p></div>
+  <!-- PANELS -->
+  <div id="firstMid" class="tab-panel active">
+    <div class="panel-title">📘 1st Mid Exam</div>
+    <div id="firstMidContent"><p class="loading">⏳ Loading...</p></div>
+  </div>
+
+  <div id="secondMid" class="tab-panel">
+    <div class="panel-title">📗 2nd Mid Exam</div>
+    <div id="secondMidContent"><p class="loading">⏳ Loading...</p></div>
+  </div>
+
+  <div id="finalExam" class="tab-panel">
+    <div class="panel-title">📕 Final Exam · Both Batches</div>
+    <div id="finalExamContent"><p class="loading">⏳ Loading...</p></div>
   </div>
 </div>
+<footer>© 2026 Exam Notice System · auto‑refresh 30s</footer>
 
 <script>
-// ==================== UPDATED GOOGLE SHEETS URL ====================
-const URL = "https://script.google.com/macros/s/AKfycbzsqrPCMeSLFjWiBq1tRyYkgtWMoTLHsFY-UiGtWObGWWc4bjvYZ2YyHykMSs7QusV1yw/exec";
+  // ===================== CONFIG =====================
+  const URL = "https://script.google.com/macros/s/AKfycbzsqrPCMeSLFjWiBq1tRyYkgtWMoTLHsFY-UiGtWObGWWc4bjvYZ2YyHykMSs7QusV1yw/exec";
+  const CACHE_KEY = "exam_cache_v4";
 
-const CACHE_KEY = "exam_cache_v4";
-
-// 🎨 render function - same design as before
-function render(data){
-  const first = document.getElementById("firstMid");
-  const second = document.getElementById("secondMid");
-
-  first.innerHTML = "";
-  second.innerHTML = "";
-
-  if (!data || data.length === 0) {
-    first.innerHTML = '<p class="loading">📭 No exam notices found</p>';
-    second.innerHTML = '<p class="loading">📭 No exam notices found</p>';
-    return;
+  // ========== HARD-CODED FINAL ROUTINES (9th & 8th Batch) ==========
+  function buildFinalRoutines() {
+    const batch9 = [
+      { subject: "PITH 5101 · Fundamentals of Mathematics", date: "20-08-2026", time: "02:00-05:00", topic: "Fundamentals of Mathematics (3 Credits)" },
+      { subject: "PMTH 5102 · Differential and Integral Equations", date: "26-06-2026", time: "02:00-05:00", topic: "Differential and Integral Equations (3 Credits)" },
+      { subject: "PMTH 5103 · Lab-1 (Intro to Computer App.)", date: "03-07-2026", time: "02:00-05:00", topic: "Lab-1 (Introduction to Computer Application) (3 Credits)" },
+      { subject: "PMTH 5104 · Operations Research", date: "11-07-2026", time: "02:00-05:00", topic: "Operations Research (3 Credits)" },
+      { subject: "PMTH 5106 · Financial Mathematics", date: "18-07-2026", time: "02:00-05:00", topic: "Financial Mathematics (3 Credits)" },
+      { subject: "PMTH 5107 (Improvement) · Analytical Dynamics", date: "18-07-2026", time: "02:00-05:00", topic: "Analytical Dynamics (Improvement)" },
+      { subject: "PMTH 5112 · Intro to Digital Signal Processing", date: "24-07-2026", time: "02:00-05:00", topic: "Intro to Digital Signal Processing (3 Credits)" }
+    ];
+    const batch8 = [
+      { subject: "PMTH 5201 · Advanced Numerical Analysis", date: "19-06-2026", time: "02:00-05:00", topic: "Advanced Numerical Analysis (3 Credits)" },
+      { subject: "PMTH 5202 · Fluid Dynamics and Heat Transfer", date: "26-06-2026", time: "02:00-05:00", topic: "Fluid Dynamics and Heat Transfer (3 Credits)" },
+      { subject: "PMTH 5203 · Dynamical Systems", date: "03-07-2026", time: "02:00-05:00", topic: "Dynamical Systems (3 Credits)" },
+      { subject: "PMTH 5205 · Biomathematics", date: "10-07-2026", time: "02:00-05:40", topic: "Biomathematics (3 Credits)" },
+      { subject: "PMTH 5206 · Lattice Theory and Boolean Algebra", date: "17-07-2026", time: "02:00-05:00", topic: "Lattice Theory and Boolean Algebra (3 Credits)" },
+      { subject: "PMTH 5208 · Advanced Mathematical Methods", date: "14-07-2026", time: "02:00-05:00", topic: "Advanced Mathematical Methods (3 Credits)" }
+    ];
+    return { batch9, batch8 };
   }
 
-  data.forEach(item=>{
-    let type, subject, date, time, topic, img;
-    
-    if (Array.isArray(item)) {
-      [type, subject, date, time, topic, img] = item;
-    } else {
-      type = item.type || item[0] || "";
-      subject = item.subject || item[1] || "";
-      date = item.date || item[2] || "";
-      time = item.time || item[3] || "";
-      topic = item.topic || item[4] || "";
-      img = item.image || item[5] || "";
+  // ========== RENDER ==========
+  function render(data) {
+    document.getElementById("firstMidContent").innerHTML = "";
+    document.getElementById("secondMidContent").innerHTML = "";
+    document.getElementById("finalExamContent").innerHTML = "";
+
+    if (!data || data.length === 0) {
+      document.getElementById("firstMidContent").innerHTML = '<div class="empty-msg">📭 No 1st Mid notices</div>';
+      document.getElementById("secondMidContent").innerHTML = '<div class="empty-msg">📭 No 2nd Mid notices</div>';
+      renderFinalPanel();
+      return;
     }
 
-    let formattedDate = date;
-    try {
-      if (date && date !== "") {
-        const dateObj = new Date(date);
-        if (!isNaN(dateObj.getTime())) {
-          formattedDate = dateObj.toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-          });
-        }
+    const groups = { first: [], second: [], final: [] };
+
+    data.forEach(item => {
+      let type, subject, date, time, topic, img;
+      if (Array.isArray(item)) {
+        [type, subject, date, time, topic, img] = item;
+      } else {
+        type = item.type || item[0] || "";
+        subject = item.subject || item[1] || "";
+        date = item.date || item[2] || "";
+        time = item.time || item[3] || "";
+        topic = item.topic || item[4] || "";
+        img = item.image || item[5] || "";
       }
-    } catch(e) {
-      formattedDate = date;
+
+      let formattedDate = date;
+      try {
+        if (date && date !== "") {
+          const d = new Date(date);
+          if (!isNaN(d.getTime())) {
+            formattedDate = d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+          }
+        }
+      } catch (_) {}
+
+      const card = `
+        <div class="card">
+          <div class="subject">📘 ${subject || "Untitled"}</div>
+          <div class="meta">
+            <span>📅 ${formattedDate || "Date not set"}</span>
+            <span>⏰ ${time || "Time not set"}</span>
+          </div>
+          ${topic ? `<div class="topic">${topic}</div>` : ""}
+          ${img ? `<img src="${img}" loading="lazy" alt="exam image">` : ""}
+        </div>
+      `;
+
+      const lower = type.toLowerCase().trim();
+      if (lower === "1st" || lower === "1st mid" || lower === "1" || lower.includes("first")) {
+        groups.first.push(card);
+      } else if (lower === "2nd" || lower === "2nd mid" || lower === "2" || lower.includes("second")) {
+        groups.second.push(card);
+      } else if (lower === "final" || lower === "final exam" || lower === "3" || lower.includes("final")) {
+        groups.final.push(card);
+      } else {
+        groups.final.push(card);
+      }
+    });
+
+    document.getElementById("firstMidContent").innerHTML = groups.first.length 
+      ? groups.first.join("") 
+      : '<div class="empty-msg">📭 No 1st Mid notices</div>';
+
+    document.getElementById("secondMidContent").innerHTML = groups.second.length 
+      ? groups.second.join("") 
+      : '<div class="empty-msg">📭 No 2nd Mid notices</div>';
+
+    renderFinalPanel(groups.final);
+  }
+
+  // ========== RENDER FINAL PANEL — 2‑COLUMN ==========
+  function renderFinalPanel(extraCards = []) {
+    const { batch9, batch8 } = buildFinalRoutines();
+    const container = document.getElementById("finalExamContent");
+
+    // helper: build card html for final (smaller)
+    function buildFinalCard(ex) {
+      return `
+        <div class="card">
+          <div class="subject">📕 ${ex.subject}</div>
+          <div class="meta">
+            <span>📅 ${ex.date}</span>
+            <span>⏰ ${ex.time}</span>
+          </div>
+          <div class="topic">${ex.topic}</div>
+        </div>
+      `;
     }
 
-    const card = `
-      <div class="card">
-        <div class="subject">📘 ${subject || "Unknown"}</div>
-        <div>📅 ${formattedDate || "Date not set"}</div>
-        <div>⏰ ${time || "Time not set"}</div>
-        <div class="topic">${topic || ""}</div>
-        ${img ? `<img src="${img}" loading="lazy">` : ""}
+    let leftCol = '';
+    let rightCol = '';
+
+    // left column → 9th Batch
+    leftCol += `<div class="final-col">`;
+    leftCol += `<div class="sub-title">🧑‍🎓 9th Batch · 1st Sem <span class="batch-badge">Batch 09M</span></div>`;
+    batch9.forEach(ex => { leftCol += buildFinalCard(ex); });
+    leftCol += `</div>`;
+
+    // right column → 8th Batch
+    rightCol += `<div class="final-col">`;
+    rightCol += `<div class="sub-title">🧑‍🎓 8th Batch · 2nd Sem <span class="batch-badge">Batch 08M</span></div>`;
+    batch8.forEach(ex => { rightCol += buildFinalCard(ex); });
+    rightCol += `</div>`;
+
+    // extra fetched final cards (if any) – put below in full width
+    let extraHtml = '';
+    if (extraCards && extraCards.length > 0) {
+      extraHtml = `<div style="grid-column:1/-1; margin-top:1.2rem;"><div class="sub-title" style="font-size:1.1rem; border-bottom:2px dashed #94a3b8; padding-bottom:0.3rem;">📌 Additional Final Notices</div>`;
+      extraCards.forEach(c => { extraHtml += c; });
+      extraHtml += `</div>`;
+    }
+
+    const gridHtml = `
+      <div class="final-grid">
+        ${leftCol}
+        ${rightCol}
+        ${extraHtml}
       </div>
     `;
 
-    if(type === "1st" || type === "1st Mid" || type === "1"){
-      first.innerHTML += card;
-    } else if(type === "2nd" || type === "2nd Mid" || type === "2"){
-      second.innerHTML += card;
+    container.innerHTML = gridHtml;
+  }
+
+  // ========== CACHE ==========
+  function loadCache() {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        render(parsed);
+        return true;
+      } catch (_) { return false; }
     }
-  });
+    return false;
+  }
 
-  if (first.innerHTML === "") first.innerHTML = '<p class="loading">📭 No 1st Mid notices</p>';
-  if (second.innerHTML === "") second.innerHTML = '<p class="loading">📭 No 2nd Mid notices</p>';
-}
-
-// ⚡ load from cache instantly
-function loadCache(){
-  const cache = localStorage.getItem(CACHE_KEY);
-  if(cache){
+  // ========== FETCH ==========
+  async function fetchData() {
     try {
-      render(JSON.parse(cache));
-      return true;
-    } catch(e) {
-      return false;
+      const res = await fetch(URL);
+      const raw = await res.json();
+      let examData = [];
+      if (raw.exams && Array.isArray(raw.exams)) {
+        examData = raw.exams;
+      } else if (Array.isArray(raw)) {
+        examData = raw;
+      } else {
+        examData = [];
+      }
+      localStorage.setItem(CACHE_KEY, JSON.stringify(examData));
+      render(examData);
+    } catch (err) {
+      console.warn("Fetch error:", err);
+      if (!loadCache()) {
+        renderFinalPanel();
+        document.getElementById("firstMidContent").innerHTML = '<div class="empty-msg">⚠️ Failed to load data</div>';
+        document.getElementById("secondMidContent").innerHTML = '<div class="empty-msg">⚠️ Failed to load data</div>';
+      }
     }
   }
-  return false;
-}
 
-// 🔄 fetch new data
-async function fetchData(){
-  try{
-    const res = await fetch(URL);
-    const data = await res.json();
-    
-    let examData = [];
-    
-    if (data.exams && Array.isArray(data.exams)) {
-      examData = data.exams;
-    } else if (Array.isArray(data)) {
-      examData = data;
-    } else {
-      examData = [];
-    }
-    
-    localStorage.setItem(CACHE_KEY, JSON.stringify(examData));
-    render(examData);
-
-  }catch(err){
-    console.log("Error:", err);
-    if (!loadCache()) {
-      const first = document.getElementById("firstMid");
-      const second = document.getElementById("secondMid");
-      first.innerHTML = '<p class="loading">⚠️ Failed to load data</p>';
-      second.innerHTML = '<p class="loading">⚠️ Failed to load data</p>';
-    }
+  // ========== TABS ==========
+  function setupTabs() {
+    const buttons = document.querySelectorAll('.tab-btn');
+    const panels = {
+      firstMid: document.getElementById('firstMid'),
+      secondMid: document.getElementById('secondMid'),
+      finalExam: document.getElementById('finalExam')
+    };
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        buttons.forEach(b => b.classList.remove('active'));
+        Object.values(panels).forEach(p => p.classList.remove('active'));
+        this.classList.add('active');
+        const target = this.dataset.tab;
+        if (panels[target]) panels[target].classList.add('active');
+      });
+    });
   }
-}
 
-// 🚀 run
-loadCache();     // instant show
-fetchData();     // update
-
-// 🔁 auto update every 30 sec
-setInterval(fetchData, 30000);
+  // ========== INIT ==========
+  loadCache();
+  fetchData();
+  setupTabs();
+  setInterval(fetchData, 30000);
 </script>
-    
-<footer>
-  © 2026 Exam Notice System
-</footer>
 </body>
 </html>
