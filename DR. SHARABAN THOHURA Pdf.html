@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>DR. SHARABAN THOHURA | PDF নোটস</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #eef2ff 0%, #f5f7ff 100%);
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .instructor-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            padding: 0.5rem 1.5rem;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .sub {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 0.8rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #1e3c72;
+            font-weight: 500;
+            background: #f8fafc;
+            margin: 2rem;
+            border-radius: 1.5rem;
+        }
+
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        .pdf-card {
+            background: #ffffff;
+            border-radius: 1.2rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .pdf-card:hover {
+            transform: translateY(-4px);
+            border-color: #2a5298;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            background: #fafcff;
+        }
+
+        .pdf-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .pdf-subject {
+            display: inline-block;
+            background: #eef2ff;
+            color: #2a5298;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            margin-bottom: 0.8rem;
+        }
+
+        .pdf-desc {
+            font-size: 0.8rem;
+            color: #475569;
+            line-height: 1.5;
+            margin-top: 0.5rem;
+        }
+
+        .pdf-meta {
+            margin-top: 1rem;
+            font-size: 0.7rem;
+            color: #2a5298;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-top: 1px solid #eef2ff;
+            padding-top: 0.8rem;
+        }
+
+        .stats {
+            background: #f1f5f9;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 500;
+            color: #2a5298;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        /* PDF Viewer Popup */
+        .pdf-viewer-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pdf-viewer-container {
+            width: 92%;
+            max-width: 1200px;
+            height: 86vh;
+            background: white;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: fadeUp 0.25s ease;
+        }
+
+        @keyframes fadeUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .pdf-viewer-header {
+            background: #1e293b;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .pdf-info {
+            flex: 1;
+        }
+
+        .pdf-name {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .pdf-instructor {
+            font-size: 0.8rem;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+
+        .close-viewer {
+            background: #e53e3e;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 30px;
+            font-size: 1.3rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .close-viewer:hover {
+            background: #c53030;
+            transform: rotate(90deg);
+        }
+
+        .pdf-frame {
+            flex: 1;
+            width: 100%;
+            border: none;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            .pdf-grid { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📘 Advanced Mathematical Methods</h1>
+        <div class="instructor-badge">👨‍🏫 DR. SHARABAN THOHURA</div>
+        <div class="sub">সমস্ত ক্লাস নোট ও পিডিএফ — একটি জায়গায়</div>
+    </div>
+
+    <div id="loadingMessage" class="loading">
+        🔄 পিডিএফ লোড হচ্ছে, দয়া করে অপেক্ষা করুন...
+    </div>
+
+    <div id="pdfGridContainer" class="pdf-grid"></div>
+    <div id="stats" class="stats" style="display: none;"></div>
+</div>
+
+<div id="pdfViewerPopup" class="pdf-viewer-overlay">
+    <div class="pdf-viewer-container">
+        <div class="pdf-viewer-header">
+            <div class="pdf-info">
+                <div class="pdf-name" id="pdfName"></div>
+                <div class="pdf-instructor" id="pdfInstructor"></div>
+            </div>
+            <button class="close-viewer" onclick="closePDFViewer()">✕</button>
+        </div>
+        <iframe id="pdfFrame" class="pdf-frame" src=""></iframe>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwWs7FE3OSa9U6nuCPpKzEn1YKDRAGaLkevT8k74529SCCtTyMxGIVJYEX8Ra_YbwOMHg/exec';
+    const TARGET = "DR. SHARABAN THOHURA";
+    let pdfs = [];
+
+    async function fetchData() {
+        const loadingDiv = document.getElementById('loadingMessage');
+        try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            const pdfRows = data.pdfbook || [];
+            if (pdfRows.length === 0) throw new Error("pdfbook অ্যারে পাওয়া যায়নি।");
+
+            for (let row of pdfRows) {
+                if (row.length < 6) continue;
+                let instructor = (row[2] || "").trim();
+                if (instructor.toLowerCase().includes(TARGET.toLowerCase())) {
+                    pdfs.push({
+                        title: row[3] || "ক্লাস নোট",
+                        subject: row[1] || "",
+                        instructor: instructor,
+                        description: row[4] || "",
+                        pdfUrl: row[5] || ""
+                    });
+                }
+            }
+
+            if (pdfs.length === 0) throw new Error("কোনো PDF পাওয়া যায়নি।");
+            loadingDiv.style.display = "none";
+            renderPDFs();
+            document.getElementById("stats").style.display = "block";
+            document.getElementById("stats").innerHTML = `📚 মোট ${pdfs.length}টি পিডিএফ নোট`;
+        } catch (err) {
+            loadingDiv.innerHTML = "❌ " + err.message;
+            loadingDiv.style.background = "#ffe0e0";
+        }
+    }
+
+    function renderPDFs() {
+        const container = document.getElementById('pdfGridContainer');
+        container.innerHTML = "";
+        pdfs.forEach(pdf => {
+            const card = document.createElement('div');
+            card.className = 'pdf-card';
+            card.onclick = () => openPDF(pdf);
+            card.innerHTML = `
+                <div class="pdf-title">📄 ${escapeHtml(pdf.title)}</div>
+                <div class="pdf-subject">📚 ${escapeHtml(pdf.subject)}</div>
+                ${pdf.description ? `<div class="pdf-desc">${escapeHtml(pdf.description.substring(0, 100))}${pdf.description.length > 100 ? '…' : ''}</div>` : '<div class="pdf-desc">ক্লাস লেকচার শীট</div>'}
+                <div class="pdf-meta">🔗 ক্লিক করে পিডিএফ দেখুন</div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function openPDF(pdf) {
+        if (!pdf.pdfUrl) { alert("পিডিএফ লিংক নেই।"); return; }
+        let url = pdf.pdfUrl;
+        if (url.includes('drive.google.com') && url.includes('/d/')) {
+            const match = url.match(/\/d\/([^\/]+)/);
+            if (match) url = `https://drive.google.com/file/d/${match[1]}/preview`;
+        }
+        document.getElementById('pdfName').innerHTML = `📖 ${escapeHtml(pdf.title)}`;
+        document.getElementById('pdfInstructor').innerHTML = `👨‍🏫 ${escapeHtml(pdf.instructor)}`;
+        document.getElementById('pdfFrame').src = url;
+        document.getElementById('pdfViewerPopup').style.display = 'flex';
+    }
+
+    function closePDFViewer() {
+        document.getElementById('pdfViewerPopup').style.display = 'none';
+        document.getElementById('pdfFrame').src = '';
+    }
+
+    function escapeHtml(str) { return String(str).replace(/[&<>]/g, m => m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
+    window.onclick = e => { if(e.target === document.getElementById('pdfViewerPopup')) closePDFViewer(); };
+    fetchData();
+</script>
+</body>
+</html>
