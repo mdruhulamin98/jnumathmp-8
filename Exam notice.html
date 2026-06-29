@@ -324,6 +324,15 @@
 
   // ========== HARD-CODED FINAL ROUTINES (9th & 8th Batch) ==========
   function buildFinalRoutines() {
+     const batch8 = [
+      { subject: "PMTH 5201 · Advanced Numerical Analysis", date: "19-06-2026", time: "02:00-05:00", topic: "Advanced Numerical Analysis (3 Credits)" },
+      { subject: "PMTH 5202 · Fluid Dynamics and Heat Transfer", date: "26-06-2026", time: "02:00-05:00", topic: "Fluid Dynamics and Heat Transfer (3 Credits)" },
+      { subject: "PMTH 5203 · Dynamical Systems", date: "03-07-2026", time: "02:00-05:00", topic: "Dynamical Systems (3 Credits)" },
+      { subject: "PMTH 5205 · Biomathematics", date: "10-07-2026", time: "02:00-05:40", topic: "Biomathematics (3 Credits)" },
+      { subject: "PMTH 5206 · Lattice Theory and Boolean Algebra", date: "17-07-2026", time: "02:00-05:00", topic: "Lattice Theory and Boolean Algebra (3 Credits)" },
+      { subject: "PMTH 5208 · Advanced Mathematical Methods", date: "14-07-2026", time: "02:00-05:00", topic: "Advanced Mathematical Methods (3 Credits)" }
+    ];
+    
     const batch9 = [
       { subject: "PITH 5101 · Fundamentals of Mathematics", date: "20-08-2026", time: "02:00-05:00", topic: "Fundamentals of Mathematics (3 Credits)" },
       { subject: "PMTH 5102 · Differential and Integral Equations", date: "26-06-2026", time: "02:00-05:00", topic: "Differential and Integral Equations (3 Credits)" },
@@ -333,15 +342,8 @@
       { subject: "PMTH 5107 (Improvement) · Analytical Dynamics", date: "18-07-2026", time: "02:00-05:00", topic: "Analytical Dynamics (Improvement)" },
       { subject: "PMTH 5112 · Intro to Digital Signal Processing", date: "24-07-2026", time: "02:00-05:00", topic: "Intro to Digital Signal Processing (3 Credits)" }
     ];
-    const batch8 = [
-      { subject: "PMTH 5201 · Advanced Numerical Analysis", date: "19-06-2026", time: "02:00-05:00", topic: "Advanced Numerical Analysis (3 Credits)" },
-      { subject: "PMTH 5202 · Fluid Dynamics and Heat Transfer", date: "26-06-2026", time: "02:00-05:00", topic: "Fluid Dynamics and Heat Transfer (3 Credits)" },
-      { subject: "PMTH 5203 · Dynamical Systems", date: "03-07-2026", time: "02:00-05:00", topic: "Dynamical Systems (3 Credits)" },
-      { subject: "PMTH 5205 · Biomathematics", date: "10-07-2026", time: "02:00-05:40", topic: "Biomathematics (3 Credits)" },
-      { subject: "PMTH 5206 · Lattice Theory and Boolean Algebra", date: "17-07-2026", time: "02:00-05:00", topic: "Lattice Theory and Boolean Algebra (3 Credits)" },
-      { subject: "PMTH 5208 · Advanced Mathematical Methods", date: "14-07-2026", time: "02:00-05:00", topic: "Advanced Mathematical Methods (3 Credits)" }
-    ];
-    return { batch9, batch8 };
+  
+    return { batch8, batch9 };
   }
 
   // ========== RENDER ==========
@@ -442,16 +444,16 @@
     let leftCol = '';
     let rightCol = '';
 
-    // left column → 9th Batch — full "Semester"
+    // left column → 8th Batch (moved to left)
     leftCol += `<div class="final-col">`;
-    leftCol += `<div class="sub-title">🧑‍🎓 9th Batch · 1st Semester <span class="batch-badge">Batch 09M</span></div>`;
-    batch9.forEach(ex => { leftCol += buildFinalCard(ex); });
+    leftCol += `<div class="sub-title">🧑‍🎓 8th Batch · 2nd Semester <span class="batch-badge">Batch 08M</span></div>`;
+    batch8.forEach(ex => { leftCol += buildFinalCard(ex); });
     leftCol += `</div>`;
 
-    // right column → 8th Batch — full "Semester"
+    // right column → 9th Batch (moved to right)
     rightCol += `<div class="final-col">`;
-    rightCol += `<div class="sub-title">🧑‍🎓 8th Batch · 2nd Semester <span class="batch-badge">Batch 08M</span></div>`;
-    batch8.forEach(ex => { rightCol += buildFinalCard(ex); });
+    rightCol += `<div class="sub-title">🧑‍🎓 9th Batch · 1st Semester <span class="batch-badge">Batch 09M</span></div>`;
+    batch9.forEach(ex => { rightCol += buildFinalCard(ex); });
     rightCol += `</div>`;
 
     // extra fetched final cards (if any) – put below in full width
